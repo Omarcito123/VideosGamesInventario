@@ -1,0 +1,12 @@
+<mat-tab-group class="demo-tab-group" (selectedTabChange)="onTabClick($event)">
+    <mat-tab label="Realizar pedido">
+        <div class="container">
+            <app-crear-pedido *ngIf="isActive"></app-crear-pedido>
+        </div>
+    </mat-tab>
+    <mat-tab label="Ver pedidos" *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'">
+        <div class="container">
+            <app-ver-pedido-sucursal></app-ver-pedido-sucursal>
+        </div>
+    </mat-tab>
+</mat-tab-group>

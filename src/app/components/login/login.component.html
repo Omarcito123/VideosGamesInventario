@@ -1,0 +1,30 @@
+<div class="principal">
+    <div class="wrapper bg-white Absolute-Center">
+        <div class="h2 text-center">VideosGames</div>
+        <div class="h4 text-muted text-center pt-2" style="font-size: 1rem;">Ingresa tus credenciales</div>
+        <form class="pt-3">
+            <div class="form-group py-2">
+                <div class="input-field"> <span class="far fa-user p-2"></span>
+                    <input autocomplete="off" type="text" placeholder="Usuario" [(ngModel)]="userLogin.username" name="username" required>
+                </div>
+            </div>
+            <div class="form-group py-1 pb-2">
+                <div class="input-field"> <span class="fas fa-lock p-2"></span>
+                    <input autocomplete="off" style="float: left" type="password" id="inputPassword" name="password" [type]="hide ? 'password' : 'text'" placeholder="Contraseña" [(ngModel)]="userLogin.pass" (ngModelChange)="validateUsername($event)" (keyup.enter)="login(userLogin)"
+                        required>
+                    <button class="btn bg-white text-muted"> 
+                        <span class="far fa-eye-slash" (click)="showHidenPass()"></span> 
+                    </button>
+                </div>
+            </div>
+            <div class="d-flex align-items-start">
+                <div class="ml-auto">
+                    <a href="#" id="forgot"></a>
+                </div>
+            </div> <button class="btn btn-block text-center my-3" (click)="login(userLogin)">Ingresar</button>
+        </form>
+        <ngx-spinner bdColor="rgba(51, 51, 51, 0.8)" size="default" type="ball-spin-clockwise">
+            <p style="color: white">Cargando...</p>
+        </ngx-spinner>
+    </div>
+</div>

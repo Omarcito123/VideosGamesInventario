@@ -1,0 +1,266 @@
+<mat-tab-group class="demo-tab-group">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+                <span>Realizar compra</span>
+            </div>
+        </ng-template>
+        <div class="container textCon">
+            <div class="row">
+                <div class="col-lg-4" style="margin-bottom: 5px;">
+                    <mat-card style="width: 100%;">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item fila">
+                                <a>Fecha:</a>
+                                <span class="font-weight-bold" style="float: right;">{{fecha | date:'dd/MM/yyyy'}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Inicio caja:</a>
+                                <span class="font-weight-bold" style="float: right;">{{caja.iniciocaja | currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Monedas:</a>
+                                <span class="font-weight-bold" style="float: right;">{{caja.monedas | currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Compras:</a>
+                                <span class="font-weight-bold" style="float: right;">{{totalComprasSucursal | currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Faltante:</a>
+                                <span class="font-weight-bold" style="float: right;">{{caja.faltante | currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Sobrante:</a>
+                                <span class="font-weight-bold" style="float: right;">{{caja.sobrante | currency}}</span>
+                            </li>
+                        </ul>
+                    </mat-card>
+                </div>
+                <div class="col-lg-4" style="margin-bottom: 5px;">
+                    <mat-card style="width: 100%;">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item fila">
+                                <a>Tarjetas:</a>
+                                <span class="font-weight-bold" style="float: right;">{{totalVentasTarjetas | currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Venta total:</a>
+                                <span class="font-weight-bold" style="float: right;">{{totalVentas | currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Venta en sucursal:</a>
+                                <span class="font-weight-bold" style="float: right;">{{ventaTotalSucursal | currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Agricola:</a>
+                                <span class="font-weight-bold" style="float: right;">{{totalAgricola | currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Credomatic:</a>
+                                <span class="font-weight-bold" style="float: right;">{{totalCredo | currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Davivienda:</a>
+                                <span class="font-weight-bold" style="float: right;">{{totalDavi | currency}}</span>
+                            </li>
+                        </ul>
+                    </mat-card>
+                </div>
+                <div class="col-lg-4" style="margin-bottom: 5px;">
+                    <mat-card style="width: 100%;">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item fila">
+                                <a>Efectivo:</a>
+                                <span class="font-weight-bold" style="float: right;">{{totalEfectivo | currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Pago en linea retira en sucursal:</a>
+                                <span class="font-weight-bold" style="float: right;">{{totalPagoOnLine | currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Cuscatlan:</a>
+                                <span class="font-weight-bold" style="float: right;">{{totalCuscatlan| currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>QR o transferencias:</a>
+                                <span class="font-weight-bold" style="float: right;">{{totalQR | currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Reservas:</a>
+                                <span class="font-weight-bold" style="float: right;">{{totalReserva | currency}}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Efectivo a entregar:</a>
+                                <span class="font-weight-bold" style="float: right;">{{totalEfectivoEntregar | currency}}</span>
+                            </li>
+                        </ul>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <mat-tab-group>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+                            <span>Agregar productos</span>
+                        </div>
+                    </ng-template>
+                    <div class="col-lg-12">
+                        <form [formGroup]="addProductCarForm" style="margin-bottom: 40px; margin-top: 10px;">
+                            <div class="form-row">
+                                <div class="col-lg-12">
+                                    <mat-form-field appearance="fill" style="width: 100%;">
+                                        <mat-label>Producto</mat-label>
+                                        <input matInput placeholder="Ingresa el nombre del producto" name="nombre" formControlName="nombre" [(ngModel)]="compraCar.nombre" type="text" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <mat-form-field appearance="fill" style="width: 100%;">
+                                        <mat-label>Cantidad</mat-label>
+                                        <input matInput placeholder="0" name="cantidad" formControlName="cantidad" [(ngModel)]="compraCar.cantidad" type="text" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <mat-form-field appearance="fill" style="width: 100%;">
+                                        <mat-label>Precio</mat-label>
+                                        <input matInput placeholder="$0.00" name="precio" (focusout)="calcularCompraProd()" formControlName="precio" [(ngModel)]="compraCar.precio" type="text" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <mat-form-field appearance="fill" style="width: 100%;">
+                                        <mat-label>Total</mat-label>
+                                        <input matInput placeholder="$0.00" type="number" name="total" formControlName="total" [(ngModel)]="compraCar.total" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="form-row" style="float: right; margin-bottom: 20px;">
+                                <div class="example-button-row">
+                                    <button mat-flat-button color="warn" (click)="clearCompra()" style="margin-right: 10px;">Limpiar</button>
+                                    <button mat-flat-button color="primary" (click)="agregarProductoCompra()">Agregar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <div class="row">
+                            <mat-icon>shopping_cart</mat-icon>
+                            <span matBadge="{{ itemsInCar }}" matBadgeOverlap="false" style="margin-top: 5px;"></span>
+                        </div>
+                    </ng-template>
+                    <div class="col-lg-12">
+                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tablavg" matSort style="margin-bottom: 25px;">
+
+                            <!--- Note that these columns can be defined in any order.
+                                  The actual rendered columns are set as a property on the row definition" -->
+
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="cantidad">
+                                <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Cantidad </th>
+                                <td mat-cell *matCellDef="let element"> {{element.nombre == 'totalAllProduct' ? '' : element.cantidad}} </td>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="nombre">
+                                <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Nombre </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.nombre == 'totalAllProduct' ? '' : element.nombre }} </td>
+                            </ng-container>
+
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="precio">
+                                <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Precio unidad </th>
+                                <td mat-cell *matCellDef="let element" style="text-align: right;"> {{ element.nombre == 'totalAllProduct' ? '' : element.precio | currency }} </td>
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="total">
+                                <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Total </th>
+                                <td mat-cell *matCellDef="let element" style="text-align: right;"> {{ element.total | currency }} </td>
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="options">
+                                <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Opciones </th>
+                                <td mat-cell *matCellDef="let element" style="text-align: center;">
+                                    <mat-icon matTooltip="Eliminar" *ngIf="element.nombre != 'totalAllProduct'" class="micon" (click)="deleteProductCar(element)">delete</mat-icon>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                        <div *ngIf="itemsInCar == 0" style="text-align: center;">
+                            <p style="text-align: center;">No hay productos agregados</p>
+                        </div>
+                        <div *ngIf="itemsInCar > 0" class="row" style="padding-left: 0px; padding-right: 0px;">
+                            <div class="col-lg-12">
+                                <form>
+                                    <div class="form-row">
+                                        <div class="form-group col-lg-3">
+                                            <mat-form-field appearance="fill" style="width: 100%;">
+                                                <mat-label>Comprador</mat-label>
+                                                <mat-select [(ngModel)]="selectedUser" name="UserS">
+                                                    <mat-option *ngFor="let vendedor of usersList" [value]="vendedor.iduser">
+                                                        {{ vendedor.firstname + " " + vendedor.surname }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="form-group col-lg-3">
+                                            <mat-form-field appearance="fill" style="width: 100%;">
+                                                <mat-label>Selecciona un comprobante</mat-label>
+                                                <mat-select id="comprobanteSelect" [(ngModel)]="selectedComprobante" name="comprobanteS">
+                                                    <mat-option *ngFor="let comprobante of comprobantesList" [value]="comprobante.description">
+                                                        {{ comprobante.description }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="form-group col-lg-3" *ngIf="selectedComprobante == 'Factura'">
+                                            <mat-form-field appearance="fill" style="width: 100%;">
+                                                <mat-label>Ingresa el # de factura</mat-label>
+                                                <input id="facturaInput" matInput placeholder="Ingresa el numero de la factura" name="facturaS" [(ngModel)]="numberFactura" type="text" />
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="form-group col-lg-3" *ngIf="selectedComprobante == 'Recibo'">
+                                            <mat-form-field appearance="fill" style="width: 100%;">
+                                                <mat-label>Ingresa el # de recibo</mat-label>
+                                                <input id="ReciboInput" matInput placeholder="Ingresa el numero del recibo" name="reciboS" [(ngModel)]="numberRecibo" type="text" />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div *ngIf="itemsInCar > 0" class="row" style="text-align: right;">
+                            <div class="col-lg-6">
+                            </div>
+                            <div class="col-lg-2">
+                            </div>
+                            <div class="col-lg-2">
+                            </div>
+                            <div class="col-lg-2">
+                                <button mat-flat-button color="primary" style="text-align: right; margin-bottom: 10px;" (click)="realizarCompra()">Realizar compra</button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </mat-tab>
+    <mat-tab label="Compras del dia">
+        <div class="container">
+            <app-list-compras></app-list-compras>
+        </div>
+    </mat-tab>
+    <mat-tab label="Compras mensuales" *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'">
+        <div class="container">
+            <app-compras-mensuales></app-compras-mensuales>
+        </div>
+    </mat-tab>
+</mat-tab-group>

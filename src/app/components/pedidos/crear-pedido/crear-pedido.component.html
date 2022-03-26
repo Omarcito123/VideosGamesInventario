@@ -1,0 +1,63 @@
+<div class="container textCon">
+    <div class="container textCon">
+        <div class="row" style="margin-top: 15px;">
+            <div class="col-lg-6">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Filtro</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Filtro" autocomplete="off">
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6" style="text-align: right;">
+                <button mat-raised-button color="primary" (click)="addPedido()">Realizar pedido</button>
+            </div>
+        </div>
+
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tablavg" matSort style="margin-bottom: 25px;">
+
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="cantidad">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.cantidad}} </td>
+            </ng-container>
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="existencia">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Existencia sucursal </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.existencia}} </td>
+            </ng-container>
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="existenciabodega">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Existencia bodega </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.existenciabodega}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="nombreproducto">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.nombreproducto}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="dateadd">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha solicitado </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.dateadd | date:'dd/MM/yyyy'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="options">
+                <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Opciones </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;">
+                    <mat-icon matTooltip="Editar" class="micon" (click)="editPedido(element)">border_color</mat-icon>
+                    <mat-icon matTooltip="Eliminar" class="micon" (click)="deletePedido(element)">delete</mat-icon>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons></mat-paginator>
+    </div>
+</div>

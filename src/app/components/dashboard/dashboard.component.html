@@ -1,0 +1,92 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <div class="col-lg-6">
+            <div class="row">
+                <button mat-icon-button>
+                    <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+                </button>
+                <span style="font-size: 16px; text-align: center; margin-top: auto; margin-bottom: auto;">VideosGames {{userSesion.sucursal}}</span>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="row sesionIcon" style="float: right;">
+                <mat-icon class="offSesion" (click)="openDialogLogout()">power_settings_new</mat-icon>
+            </div>
+        </div>
+        <!-- <div>
+            <a mat-button [routerLink]="'/accounts'"> Accounts </a>
+            <a mat-button [routerLink]="'/create-account'"> Create Account </a>
+            <a mat-button [routerLink]="'/contacts'"> Contacts </a>
+            <a mat-button [routerLink]="'/create-contact'"> Create Contact </a>
+            <a mat-button [routerLink]="'/activities'"> Activities </a>
+            <a mat-button [routerLink]="'/create-activity'"> Create Activity </a>
+        </div> -->
+    </mat-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container>
+    <mat-sidenav #sidenav mode="side" opened>
+        <mat-nav-list style="background-color: white;">
+            <a mat-list-item [routerLink]="'/dashboard/perfil'">
+                <mat-icon class="micon">perm_contact_calendar</mat-icon>
+                <span> Mi perfil </span>
+            </a>
+            <a *ngIf="rol == 'SuperAdmin'" mat-list-item [routerLink]="'/dashboard/usuarios'">
+                <mat-icon class="micon">person_pin</mat-icon>
+                <span> Usuarios </span>
+            </a>
+            <a mat-list-item [routerLink]="'/dashboard/controlhoras'">
+                <mat-icon class="micon">schedule</mat-icon>
+                <span> Control de horas </span>
+            </a>
+            <a mat-list-item [routerLink]="'/dashboard/ventas'">
+                <mat-icon class="micon">store_mall_directory</mat-icon>
+                <span> Ventas </span>
+            </a>
+            <a mat-list-item [routerLink]="'/dashboard/reservas'">
+                <mat-icon class="micon">note_add</mat-icon>
+                <span> Reservas </span>
+            </a>
+            <a mat-list-item [routerLink]="'/dashboard/pedidos'">
+                <mat-icon class="micon">description</mat-icon>
+                <span> Pedidos </span>
+            </a>
+            <a mat-list-item [routerLink]="'/dashboard/reparaciones'">
+                <mat-icon class="micon">build</mat-icon>
+                <span> Reparaciones </span>
+            </a>
+            <a mat-list-item [routerLink]="'/dashboard/comprasusado'">
+                <mat-icon class="micon">shopping_cart</mat-icon>
+                <span> Compras </span>
+            </a>
+            <a *ngIf="rol == 'SuperAdmin'" mat-list-item [routerLink]="'/dashboard/comision'">
+                <mat-icon class="micon">monetization_on</mat-icon>
+                <span> Comisión </span>
+            </a>
+            <a *ngIf="rol == 'SuperAdmin'" mat-list-item [routerLink]="'/dashboard/cupones'">
+                <mat-icon class="micon">card_giftcard</mat-icon>
+                <span> Cupones </span>
+            </a>
+            <a *ngIf="rol == 'SuperAdmin'" mat-list-item [routerLink]="'/dashboard/sucursales'">
+                <mat-icon class="micon">store</mat-icon>
+                <span> Sucursales </span>
+            </a>
+            <a mat-list-item [routerLink]="'/dashboard/inventario'">
+                <mat-icon class="micon">assignment</mat-icon>
+                <span> Inventario </span>
+            </a>
+            <a *ngIf="rol == 'SuperAdmin'" mat-list-item [routerLink]="'/dashboard/categorias'">
+                <mat-icon class="micon">group_work</mat-icon>
+                <span> Categorias </span>
+            </a>
+            <a mat-list-item [routerLink]="'/dashboard/notas'">
+                <mat-icon class="micon">receipt</mat-icon>
+                <span> Notas </span>
+            </a>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div style="height: 95vh; overflow: auto;">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

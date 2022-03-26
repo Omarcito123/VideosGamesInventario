@@ -1,0 +1,64 @@
+<mat-tab-group class="demo-tab-group">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+                <span>Marcar</span>
+            </div>
+        </ng-template>
+        <div class="container textCon">
+            <h3 class="font-weight-bold">Modulo de control del horario diario</h3>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card" style="width: 100%;">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item fila">
+                                <a>Hora de entrada:</a>
+                                <span class="font-weight-bold" style="float: right;">{{ horaEntrada == '--:--' ? '--:--' : horaEntrada | date:'dd/MM/yyyy HH:mm:ss a' }}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Hora salida almuerzo:</a>
+                                <span class="font-weight-bold" style="float: right;">{{ horaSalidaAlmuerzo == '--:--' ? '--:--' : horaSalidaAlmuerzo | date:'dd/MM/yyyy HH:mm:ss a' }}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Hora entrada almuerzo:</a>
+                                <span class="font-weight-bold" style="float: right;">{{ horaEntradaAlmuerzo == '--:--' ? '--:--' : horaEntradaAlmuerzo | date:'dd/MM/yyyy HH:mm:ss a' }}</span>
+                            </li>
+                            <li class="list-group-item fila">
+                                <a>Hora de salida:</a>
+                                <span class="font-weight-bold" style="float: right;">{{ horaSalida == '--:--' ? '--:--' : horaSalida | date:'dd/MM/yyyy HH:mm:ss a' }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <form style="margin-bottom: 40px;">
+                <div class="row">
+                    <div class="form-group col-lg-6">
+                        <mat-form-field appearance="fill" style="width: 100%;">
+                            <mat-label>Selecciona una opción</mat-label>
+                            <mat-select [(ngModel)]="selectedValue" name="food">
+                                <mat-option *ngFor="let food of foods" [value]="food.value">
+                                    {{food.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-lg-6" style="text-align: right;">
+                        <div class="example-button-row">
+                            <button mat-flat-button color="primary" (click)="marcarHora()">Marcar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </mat-tab>
+    <mat-tab label="Historial de horarios" *ngIf="rol == 'Administrador'">
+        <div class="container">
+            <app-historial-control-horas></app-historial-control-horas>
+        </div>
+    </mat-tab>
+</mat-tab-group>

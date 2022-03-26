@@ -1,0 +1,209 @@
+<div class="container textCon">
+    <div *ngIf="!isDetalle">
+        <h3 style="margin-top: 10px;" class="font-weight-bold">Modulo de reparaciones</h3>
+        <div class="row">
+            <div class="col-lg-6">
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Filtro</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Filtro" autocomplete="off">
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6" style="text-align: right;">
+                <button mat-raised-button color="primary" (click)="addReparacion()">Agregar Reparacion</button>
+            </div>
+        </div>
+
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tablavg" matSort style="margin-bottom: 25px;">
+
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="cliente">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.nombrecliente}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="telefono">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Telefono </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.telefonocliente}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="dui">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Dui </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.duicliente}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="descripcion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.descripcion}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha ingresado </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.dateadd | date:'dd/MM/yyyy'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="options">
+                <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Opciones </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;">
+                    <mat-icon matTooltip="Agregar detalle" class="micon" (click)="addRepuestos(element)">build</mat-icon>
+                    <mat-icon matTooltip="Editar información general" class="micon" (click)="editReparacion(element)">border_color</mat-icon>
+                    <mat-icon matTooltip="Eliminar" class="micon" (click)="deleteReparacion(element)">delete</mat-icon>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons></mat-paginator>
+    </div>
+    <div *ngIf="isDetalle" style="margin-top: 15px;">
+        <h3 class="font-weight-bold">Detalle de la reparación</h3>
+
+        <form>
+            <div class="form-row">
+                <div class="form-group col-lg-3">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <mat-label>Nombre del cliente</mat-label>
+                        <input matInput readonly="true" name="nombrecliente" [(ngModel)]="repEncabezado.nombrecliente" type="text" />
+                    </mat-form-field>
+                </div>
+                <div class="form-group col-lg-3">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <mat-label># de telefono del cliente</mat-label>
+                        <input matInput readonly="true" name="telefonocliente" [(ngModel)]="repEncabezado.telefonocliente" type="text" />
+                    </mat-form-field>
+                </div>
+                <div class="form-group col-lg-3">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <mat-label>Dui del cliente:</mat-label>
+                        <input matInput readonly="true" name="duicliente" [(ngModel)]="repEncabezado.duicliente" type="text" />
+                    </mat-form-field>
+                </div>
+                <div class="form-group col-lg-3">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <mat-label>Recibo:</mat-label>
+                        <input matInput readonly="true" name="recibo" [(ngModel)]="repEncabezado.recibo" type="text" />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-lg-12">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <mat-label>Descripción de la reparación</mat-label>
+                        <textarea matLine="3" readonly="true" matInput name="descripcion" [(ngModel)]="repEncabezado.descripcion" type="text"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+
+        <div class="row" style="margin-bottom: 15px;">
+            <div class="col-lg-12" style="text-align: right;">
+                <button mat-raised-button color="primary" (click)="addDetalle()">Agregar Repuesto</button>
+            </div>
+        </div>
+
+        <table mat-table [dataSource]="dataSource2" class="mat-elevation-z8 tablavg" matSort style="margin-bottom: 25px;">
+
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="cantidad">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.cantidad}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="nombre">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.nombreproducto}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="nota" width="30%">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header width="30%"> Nota </th>
+                <td mat-cell *matCellDef="let element" width="35%" style="text-align: center;"> {{element.nota}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="precio">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Precio </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.precioregular | currency}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="total">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Total </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.preciototal | currency}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="options">
+                <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Opciones </th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;">
+                    <mat-icon *ngIf="rol == 'Administrador'" matTooltip="Editar detalle" class="micon" (click)="editDetalle(element)">border_color</mat-icon>
+                    <mat-icon matTooltip="Eliminar" class="micon" (click)="deleteReparacionDet(element)">delete</mat-icon>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons></mat-paginator>
+
+        <div *ngIf="reparacionDetList.length > 0" class="row" style="padding-left: 0px; padding-right: 0px; margin-top: 10px;">
+            <div class="col-lg-12">
+                <form [formGroup]="payProductCarForm">
+                    <div class="form-row">
+                        <div class="form-group col-lg-4">
+                            <mat-form-field appearance="fill" style="width: 100%;">
+                                <mat-label>Selecciona un vendedor</mat-label>
+                                <mat-select id="vendedorSelect" [(ngModel)]="selectedVendedor" name="vendedorS" formControlName="vendedorS">
+                                    <mat-option *ngFor="let vendedor of usersList" [value]="vendedor.iduser">
+                                        {{ vendedor.firstname + " " + vendedor.surname }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <mat-form-field appearance="fill" style="width: 100%;">
+                                <mat-label>Ingresa un comprobante</mat-label>
+                                <mat-select id="comprobanteSelect" [(ngModel)]="selectedComprobante" formControlName="comprobanteS" name="comprobanteS">
+                                    <mat-option *ngFor="let comprobante of comprobantesList" [value]="comprobante.description">
+                                        {{ comprobante.description }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group col-lg-4" *ngIf="selectedComprobante == 'Factura'">
+                            <mat-form-field appearance="fill" style="width: 100%;">
+                                <mat-label>Ingresa el # de factura</mat-label>
+                                <input id="facturaInput" matInput placeholder="Ingresa el numero de la factura" formControlName="facturaS" name="facturaS" [(ngModel)]="numberFactura" type="text" />
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group col-lg-4" *ngIf="selectedComprobante == 'Recibo'">
+                            <mat-form-field appearance="fill" style="width: 100%;">
+                                <mat-label>Ingresa el # del recibo</mat-label>
+                                <input id="facturaInput" matInput placeholder="Ingresa el numero del recibo" formControlName="reciboS" name="reciboS" [(ngModel)]="numberRecibo" type="text" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8">
+            </div>
+            <div class="col-lg-4">
+                <button style="float: right;" mat-raised-button color="primary" (click)="entregarRep()">Entregar</button>
+                <button style="float: right; margin-right: 10px;" mat-raised-button color="warn" (click)="goBackRepEnc()">Regresar</button>
+            </div>
+        </div>
+    </div>
+</div>

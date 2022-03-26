@@ -1,0 +1,139 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box
+}
+
+body {
+    background-color: #eee;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to top, #fff 10%, rgba(93, 42, 141, 0.4) 90%) no-repeat
+}
+
+.principal {
+    position: relative;
+    height: 100%;
+}
+
+.Absolute-Center {
+    height: 65%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.wrapper {
+    max-width: 400px;
+    border-radius: 10px;
+    margin: auto;
+    padding: 30px 40px;
+    box-shadow: 20px 20px 80px rgb(206, 206, 206)
+}
+
+.h2 {
+    font-family: 'Helvetica';
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #3f51b5;
+    font-style: italic
+}
+
+.h4 {
+    font-family: 'Poppins', sans-serif
+}
+
+.input-field {
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid #3f51b5;
+    color: #3f51b5
+}
+
+.input-field:hover {
+    color: #3f51b5;
+    border: 1px solid #3f51b5
+}
+
+input {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    width: 100%;
+    padding: 0px 2px;
+    font-family: 'Poppins', sans-serif
+}
+
+.fa-eye-slash.btn {
+    border: none;
+    outline: none;
+    box-shadow: none
+}
+
+a {
+    text-decoration: none;
+    color: #3f51b5;
+    font-weight: 700
+}
+
+a:hover {
+    text-decoration: none;
+    color: #3f51b5
+}
+
+.option {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer
+}
+
+.option label.text-muted {
+    display: block;
+    cursor: pointer
+}
+
+.option input {
+    display: none
+}
+
+.btn.btn-block {
+    padding: 10px;
+    margin-top: 30px !important;
+    border-radius: 5px;
+    background-color: #3f51b5;
+    color: #fff
+}
+
+.btn.btn-block:hover {
+    background-color: #3f51b5
+}
+
+@media(max-width: 575px) {
+    .wrapper {
+        margin: 10px
+    }
+}
+
+@media(max-width:424px) {
+    .wrapper {
+        padding: 30px 10px;
+        margin: 5px
+    }
+    .option {
+        position: relative;
+        padding-left: 22px
+    }
+    .option label.text-muted {
+        font-size: 0.95rem
+    }
+    #forgot {
+        font-size: 0.95rem
+    }
+}

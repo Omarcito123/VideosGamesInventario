@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>Agregar producto a pedido</h1>
+<div mat-dialog-content>
+    <form [formGroup]="addPedidoForm" style="margin-bottom: 40px; min-width: 650px;">
+        <div class="row">
+            <div class="col-lg-4">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Serie</mat-label>
+                    <input type="text" placeholder="Serie del producto" (focusout)="fillDataProductSerie()" [(ngModel)]="pedido.serie" name="serie" aria-label="serie" [formControl]="myControlSerie" matInput [matAutocomplete]="autoComp" />
+                    <mat-autocomplete #autoComp="matAutocomplete">
+                        <mat-option *ngFor="let optionsSeri of filteredSeriesOptions | async" [value]="optionsSeri">
+                            {{ optionsSeri }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-8">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Nombre</mat-label>
+                    <input type="text" placeholder="Pick one" [(ngModel)]="pedido.nombreproducto" (focusout)="fillDataProduct()" aria-label="Nombre" [formControl]="myControl" matInput [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                            {{ option }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-lg-6">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Existencias</mat-label>
+                    <input matInput readonly="true" [(ngModel)]="existencia" type="text" name="existencia" [ngModelOptions]="{standalone: true}">
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Cantidad</mat-label>
+                    <input matInput placeholder="Ingresa la cantidad" [(ngModel)]="pedido.cantidad" type="number" formControlName="cantidad">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row" style="float: right;">
+            <div class="example-button-row">
+                <button mat-flat-button color="warn" (click)="onNoClick()" style="margin-right: 20px;">Cancelar</button>
+                <button mat-flat-button color="primary" (click)="savePedido()">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,52 @@
+<h1 mat-dialog-title>Trasladar producto</h1>
+<div mat-dialog-content>
+    <form style="margin-bottom: 40px; min-width: 350px;">
+        <div class="form-row"><span style="font-weight: bold;">De:</span></div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Sucursal</mat-label>
+                    <input matInput placeholder="0" readonly="true" type="text" [(ngModel)]="nombreSucursal" name="sucursal">
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-6">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Producto</mat-label>
+                    <input matInput placeholder="0" readonly="true" type="text" [(ngModel)]="productTras.nombre" name="nombre">
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Existencias</mat-label>
+                    <input matInput placeholder="0" readonly="true" type="number" [(ngModel)]="productTras.existencia" name="existencia">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row"><span style="font-weight: bold;">Para:</span></div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Cantidad</mat-label>
+                    <input matInput placeholder="0" type="number" [(ngModel)]="cantidad" name="cantidad">
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-6">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Selecciona una sucursal</mat-label>
+                    <mat-select [(ngModel)]="selectedSucursal" name="idsucursal" multiple>
+                        <mat-option *ngFor="let sucursal of sucursalesList" [value]="sucursal.idsucursal" (click)="toggleSelectOne()">
+                            {{sucursal.nombre}}
+                        </mat-option>
+                        <mat-option (click)="toggleSelectAll()" [value]="0">Todas</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row" style="float: right;">
+            <div class="example-button-row">
+                <button mat-flat-button color="warn" (click)="onNoClick()" style="margin-right: 20px;">Cancelar</button>
+                <button mat-flat-button color="primary" (click)="trasladarProduct()">Trasladar</button>
+            </div>
+        </div>
+    </form>
+</div>

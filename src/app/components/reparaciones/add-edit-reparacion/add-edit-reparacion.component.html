@@ -1,0 +1,48 @@
+<h1 mat-dialog-title>Agregar reparación</h1>
+<div mat-dialog-content>
+    <form [formGroup]="addReparacionForm" style="margin-bottom: 40px; min-width: 350px;">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Nombre completo</mat-label>
+                    <input matInput placeholder="Ingresa el nombre completo" [(ngModel)]="reparacion.nombrecliente" type="text" formControlName="nombre">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Telefono</mat-label>
+                    <input matInput placeholder="Ingresa el telefono" [(ngModel)]="reparacion.telefonocliente" type="text" formControlName="telefono">
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-4">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Dui</mat-label>
+                    <input matInput placeholder="Ingresa el dui" [(ngModel)]="reparacion.duicliente" type="text" name="dui" [ngModelOptions]="{standalone: true}">
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-4">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Recibo</mat-label>
+                    <input matInput placeholder="Ingresa el numero de recibo" [(ngModel)]="reparacion.recibo" type="text" name="recibo" [ngModelOptions]="{standalone: true}">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Descripción</mat-label>
+                    <textarea matLine="3" matInput placeholder="Ingresa una descripción" [(ngModel)]="reparacion.descripcion" type="text" formControlName="descripcion">
+                    </textarea>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row" style="float: right;">
+            <div class="example-button-row">
+                <button mat-flat-button color="warn" (click)="onNoClick()" style="margin-right: 20px;">Cancelar</button>
+                <button mat-flat-button color="primary" (click)="saveRep()">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>

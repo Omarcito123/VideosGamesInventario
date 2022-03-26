@@ -1,0 +1,104 @@
+<h1 mat-dialog-title>Agregar usuario</h1>
+<div mat-dialog-content>
+    <form [formGroup]="addUserForm" style="margin-bottom: 40px; min-width: 350px;">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Primer Nombre</mat-label>
+                    <input matInput placeholder="Ingresa el primer nombre" [(ngModel)]="usuario.firstname" type="text" formControlName="firstname">
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Segundo Nombre</mat-label>
+                    <input matInput placeholder="Ingresa el segundo nombre" [(ngModel)]="usuario.secondname" type="text" formControlName="secondname">
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Primer Apellido</mat-label>
+                    <input matInput placeholder="Ingresa el primer apellido" [(ngModel)]="usuario.surname" type="text" formControlName="surname">
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Segundo Apellido</mat-label>
+                    <input matInput placeholder="Ingresa el segundo apellido" [(ngModel)]="usuario.secondsurname" type="text" formControlName="secondsurname">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Username</mat-label>
+                    <input matInput placeholder="Ingresa el username" type="text" [(ngModel)]="usuario.username" formControlName="username">
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-3">
+                <div class="input-field">
+                    <mat-form-field appearance="fill" style="width: 85%;">
+                        <mat-label>Contraseña</mat-label>
+                        <input matInput type="password" [type]="hide ? 'password' : 'text'" [(ngModel)]="usuario.pass" formControlName="password">
+                    </mat-form-field>
+                    <span [ngClass]="{'fas fa-eye fa-1x': hide, 'far fa-eye-slash fa-1x' : !hide }" style="margin-left: 5px; font-size: 1.6em; font-weight: bold;" (click)="showHidenPass()"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Correo</mat-label>
+                    <input matInput placeholder="Ingresa el correo" type="email" [(ngModel)]="usuario.email" formControlName="email">
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Telefono</mat-label>
+                    <input matInput placeholder="Ingresa el telefono" type="text" [(ngModel)]="usuario.phone" formControlName="telefono">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Fecha de nacimiento</mat-label>
+                    <input matInput placeholder="Ingresa fecha de nacimiento" type="date" [(ngModel)]="usuario.dateborn" formControlName="dateborn">
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Selecciona un estado</mat-label>
+                    <mat-select [(ngModel)]="selectedEstado" name="selectedEstado" formControlName="selectedEstado">
+                        <mat-option *ngFor="let valor of listaEstados" [value]="valor.value">
+                            {{valor.description}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Selecciona una sucursal</mat-label>
+                    <mat-select [(ngModel)]="selectedSucursal" name="selectedSucursal" formControlName="selectedSucursal">
+                        <mat-option *ngFor="let sucursal of sucursalesList" [value]="sucursal.idsucursal">
+                            {{sucursal.nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-3">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Selecciona un rol</mat-label>
+                    <mat-select [(ngModel)]="selectedRol" formControlName="selectedRol">
+                        <mat-option *ngFor="let rol of listaRoles" [value]="rol.value">
+                            {{rol.description}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row" style="float: right;">
+            <div class="example-button-row">
+                <button mat-flat-button color="warn" (click)="onNoClick()" style="margin-right: 20px;">Cancelar</button>
+                <button mat-flat-button color="primary" (click)="saveUser()">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>

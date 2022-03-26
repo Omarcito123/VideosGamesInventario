@@ -1,0 +1,63 @@
+<mat-tab-group class="demo-tab-group">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+                <span>Configuración de comisiones</span>
+            </div>
+        </ng-template>
+        <div class="container textCon">
+            <div class="row" style="margin-top: 15px;">
+                <div class="col-lg-6">
+                    <mat-form-field style="width: 100%;">
+                        <mat-label>Filtro</mat-label>
+                        <input matInput (keyup)="applyFilter($event)" placeholder="Filtro" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-6" style="text-align: right;">
+                    <button mat-raised-button color="primary" (click)="addComision()">Agregar Comision</button>
+                </div>
+            </div>
+
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tablavg" matSort style="margin-bottom: 25px;">
+
+                <!--- Note that these columns can be defined in any order.
+                      The actual rendered columns are set as a property on the row definition" -->
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="tipocomision">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo comisión </th>
+                    <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.tipocomision}} </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="unidad">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Unidad </th>
+                    <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.unidad}} </td>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="valor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Valor </th>
+                    <td mat-cell *matCellDef="let element" style="text-align: center;"> ${{element.valor | number }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="options">
+                    <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Opciones </th>
+                    <td mat-cell *matCellDef="let element" style="text-align: center;">
+                        <mat-icon matTooltip="Editar" class="micon" (click)="editComision(element)">border_color</mat-icon>
+                        <mat-icon matTooltip="Eliminar" class="micon" (click)="deleteComision(element)">delete</mat-icon>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons></mat-paginator>
+        </div>
+    </mat-tab>
+    <mat-tab label="Comisiones por vendedor">
+        <div class="container">
+            <app-list-comisiones-vendedor></app-list-comisiones-vendedor>
+        </div>
+    </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,153 @@
+<h1 mat-dialog-title>Agregar producto</h1>
+<div mat-dialog-content>
+    <form [formGroup]="addProductForm" style="margin-bottom: 40px; min-width: 350px;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Selecciona una opción</mat-label>
+                    <mat-select [(ngModel)]="selectedValue" disabled="{{ disabledTipo }}" (ngModelChange)="clearWindows()" name="selectedValue" [ngModelOptions]="{standalone: true}">
+                        <mat-option *ngFor="let valor of listaValores" [value]="valor.value">
+                            {{valor.description}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-4">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Selecciona una sucursal</mat-label>
+                    <mat-select [(ngModel)]="selectedSucursal" (ngModelChange)="setcategoriaByDefault()" formControlName="sucursal">
+                        <mat-option *ngFor="let sucursal of sucursalesList" [value]="sucursal.idsucursal">
+                            {{sucursal.nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div *ngIf="addProductForm.get('sucursal').hasError('required') && addProductForm.get('sucursal').touched" style="margin-top: -20px;">
+                    <span class="mda-form-msg">Este campo es <strong>requerido</strong></span>
+                </div>
+                <div *ngIf="addProductForm.get('sucursal').hasError('maxlength') && addProductForm.get('sucursal').touched" style="margin-top: -20px;">
+                    <span class="mda-form-msg">El campo debe tener como maximo <strong> 6 numeros</strong></span>
+                </div>
+            </div>
+            <div class="form-group col-md-4">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Selecciona una categoria</mat-label>
+                    <mat-select [(ngModel)]="productAddEdit.categoria" (ngModelChange)="getProductsBySucursal()" name="categoria" formControlName="categoria">
+                        <mat-option *ngFor="let cate of categoriasList" [value]="cate.nombre">
+                            {{cate.nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div *ngIf="addProductForm.get('categoria').hasError('required') && addProductForm.get('categoria').touched" style="margin-top: -20px;">
+                    <span class="mda-form-msg">Este campo es <strong>requerido</strong></span>
+                </div>
+                <div *ngIf="addProductForm.get('categoria').hasError('maxlength') && addProductForm.get('categoria').touched" style="margin-top: -20px;">
+                    <span class="mda-form-msg">El campo debe tener como maximo <strong> 6 numeros</strong></span>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="selectedValue && selectedSucursal">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <div class="row">
+                        <div [ngClass]="{'col-lg-12': disabledTipo === true , 'col-lg-10' : disabledTipo === false}" class="">
+                            <mat-form-field appearance="fill" style="width: 100%;">
+                                <mat-label>Nombre</mat-label>
+                                <input type="text" placeholder="Pick one" [(ngModel)]="productAddEdit.nombre" aria-label="Nombre" [formControl]="myControl" matInput [matAutocomplete]="auto">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                        {{ option }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-2" [hidden]="disabledTipo" style="padding-left: 0px !important;">
+                            <button mat-flat-button color="primary" (click)="fillDataProduct()" style="margin-top: 10px; width: 100%;">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <mat-label>Estado</mat-label>
+                        <input matInput placeholder="Ingresa el estado del producto" [(ngModel)]="productAddEdit.estado" type="text" formControlName="estado">
+                    </mat-form-field>
+                    <div *ngIf="addProductForm.get('estado').hasError('required') && addProductForm.get('estado').touched" style="margin-top: -20px;">
+                        <span class="mda-form-msg">Este campo es <strong>requerido</strong></span>
+                    </div>
+                    <div *ngIf="addProductForm.get('estado').hasError('maxlength') && addProductForm.get('estado').touched" style="margin-top: -20px;">
+                        <span class="mda-form-msg">El campo debe tener como maximo <strong> 20 caracteres</strong></span>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <mat-label>Serie</mat-label>
+                        <input matInput placeholder="Ingresa la serie" (focusout)="fillDataProductSerie()" [(ngModel)]="productAddEdit.serie" type="text" formControlName="serie">
+                    </mat-form-field>
+                    <div *ngIf="addProductForm.get('serie').hasError('required') && addProductForm.get('serie').touched" style="margin-top: -20px;">
+                        <span class="mda-form-msg">Este campo es <strong>requerido</strong></span>
+                    </div>
+                    <div *ngIf="addProductForm.get('serie').hasError('maxlength') && addProductForm.get('serie').touched" style="margin-top: -20px;">
+                        <span class="mda-form-msg">El campo debe tener como maximo <strong> 30 caracteres</strong></span>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <mat-label>Existencias</mat-label>
+                        <input matInput placeholder="0.00" [(ngModel)]="productAddEdit.existencia" type="number" formControlName="existencia">
+                    </mat-form-field>
+                    <div *ngIf="addProductForm.get('existencia').hasError('required') && addProductForm.get('existencia').touched" style="margin-top: -20px;">
+                        <span class="mda-form-msg">Este campo es <strong>requerido</strong></span>
+                    </div>
+                    <div *ngIf="addProductForm.get('existencia').hasError('max') && addProductForm.get('existencia').touched" style="margin-top: -20px;">
+                        <span class="mda-form-msg">El campo debe tener como maximo <strong> 6 numeros</strong></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <mat-label>Precio Costo</mat-label>
+                        <input matInput placeholder="0.00" [(ngModel)]="productAddEdit.preciocosto" type="number" formControlName="preciocosto">
+                    </mat-form-field>
+                    <div *ngIf="addProductForm.get('preciocosto').hasError('required') && addProductForm.get('preciocosto').touched" style="margin-top: -20px;">
+                        <span class="mda-form-msg">Este campo es <strong>requerido</strong></span>
+                    </div>
+                    <div *ngIf="addProductForm.get('preciocosto').hasError('max') && addProductForm.get('preciocosto').touched" style="margin-top: -20px;">
+                        <span class="mda-form-msg">El campo debe tener como maximo <strong> 6 numeros</strong></span>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <mat-label>Precio Regular</mat-label>
+                        <input matInput placeholder="0.00" [(ngModel)]="productAddEdit.precioregular" type="number" formControlName="preciooferta">
+                    </mat-form-field>
+                    <div *ngIf="addProductForm.get('preciooferta').hasError('required') && addProductForm.get('preciooferta').touched" style="margin-top: -20px;">
+                        <span class="mda-form-msg">Este campo es <strong>requerido</strong></span>
+                    </div>
+                    <div *ngIf="addProductForm.get('preciooferta').hasError('max') && addProductForm.get('preciooferta').touched" style="margin-top: -20px;">
+                        <span class="mda-form-msg">El campo debe tener como maximo <strong> 6 numeros</strong></span>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <mat-label>Precio Oferta</mat-label>
+                        <input matInput placeholder="0.00" [(ngModel)]="productAddEdit.preciooferta" type="number" formControlName="precioregular">
+                    </mat-form-field>
+                    <div *ngIf="addProductForm.get('precioregular').hasError('required') && addProductForm.get('precioregular').touched" style="margin-top: -20px;">
+                        <span class="mda-form-msg">Este campo es <strong>requerido</strong></span>
+                    </div>
+                    <div *ngIf="addProductForm.get('precioregular').hasError('max') && addProductForm.get('precioregular').touched" style="margin-top: -20px;">
+                        <span class="mda-form-msg">El campo debe tener como maximo <strong> 6 numeros</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row" style="float: right;">
+            <div class="example-button-row">
+                <button mat-flat-button color="warn" (click)="onNoClick()" style="margin-right: 20px;">Cancelar</button>
+                <button mat-flat-button color="primary" (click)="saveProduct()">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>

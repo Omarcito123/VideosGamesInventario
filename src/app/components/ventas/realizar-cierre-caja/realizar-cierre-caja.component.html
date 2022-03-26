@@ -1,0 +1,113 @@
+<div class="container textCon">
+    <div class="row">
+        <div class="col-lg-4" style="margin-bottom: 5px;">
+            <mat-card style="width: 100%;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item fila">
+                        <a>Fecha:</a>
+                        <span class="font-weight-bold" style="float: right;">{{fecha | date:'dd/MM/yyyy'}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Inicio caja:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.iniciocaja | currency}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Monedas:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.monedas}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Compras:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.compras | currency}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Faltante:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.faltante | currency}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Sobrante:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.sobrante | currency}}</span>
+                    </li>
+                </ul>
+            </mat-card>
+        </div>
+        <div class="col-lg-4" style="margin-bottom: 5px;">
+            <mat-card style="width: 100%;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item fila">
+                        <a>Tarjetas:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.totaltarjetas | currency}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Venta total:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.ventatotal | currency}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Venta en sucursal:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.ventasucursal | currency}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Agricola:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.agricola | currency}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Credomatic:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.credomatic | currency}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Davivienda:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.davivienda | currency}}</span>
+                    </li>
+                </ul>
+            </mat-card>
+        </div>
+        <div class="col-lg-4" style="margin-bottom: 5px;">
+            <mat-card style="width: 100%;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item fila">
+                        <a>Efectivo:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.efectivo | currency}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Pago en linea retira en sucursal:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.pagoenlinea | currency}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Cuscatlan:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.cuscatlan | currency}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>QR o transferencias:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.qrtransferencias | currency}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Reservas:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.reservas | currency}}</span>
+                    </li>
+                    <li class="list-group-item fila">
+                        <a>Efectivo a entregar:</a>
+                        <span class="font-weight-bold" style="float: right;">{{historialCaja.efectivoentregar | currency}}</span>
+                    </li>
+                </ul>
+            </mat-card>
+        </div>
+        <div class="row" style="margin-top: 15px;" *ngIf="showDateInput">
+            <div class="col-lg-8">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Ingresa una fecha</mat-label>
+                    <input matInput [matDatepicker]="expiration1" readonly placeholder="Ingresa una fecha" [(ngModel)]="dateVenta">
+                    <mat-datepicker-toggle matSuffix [for]="expiration1"></mat-datepicker-toggle>
+                    <mat-datepicker #expiration1></mat-datepicker>
+                    <!--<mat-label>Ingresa una fecha</mat-label>
+                    <input matInput placeholder="Ingresa una fecha" (change)="getVentasBySucursal()" type="date" [(ngModel)]="dateVenta">
+                    --></mat-form-field>
+            </div>
+            <div class="col-lg-2">
+                <button mat-flat-button color="primary" style="text-align: right; margin-top: 7px;" (click)="getVentasBySucursal('otro')">Buscar</button>
+            </div>
+        </div>
+        <div class="col-12">
+            <button mat-flat-button color="primary" (click)="guardarCierreCaja()" style="float: right;">Guardar</button>
+            <button *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'" mat-flat-button color="primary" (click)="guardarCierreCajaOtroDia()" style="float: right; margin-right: 10px;">Otro dia</button>
+        </div>
+    </div>
+</div>

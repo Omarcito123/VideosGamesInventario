@@ -1,0 +1,137 @@
+<div class="container textCon">
+    <h3 class="font-weight-bold">Modulo de inventario</h3>
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-lg-2">
+            <mat-form-field appearance="fill" style="width: 100%;">
+                <mat-label>Selecciona una sucursal</mat-label>
+                <mat-select [(ngModel)]="selectedSucursal" (ngModelChange)="getProductsBySucursal()" name="sucursal">
+                    <mat-option *ngFor="let sucursal of sucursalesList" [value]="sucursal.idsucursal">
+                        {{sucursal.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-lg-3" style="text-align: right;">
+            <mat-form-field appearance="fill" style="width: 100%;">
+                <mat-label>Filtro por codigo</mat-label>
+                <input matInput (keyup)="applyFilterCode($event)" placeholder="Filtro por codigo" autocomplete="off">
+            </mat-form-field>
+        </div>
+        <div class="col-lg-3" style="text-align: right;">
+            <mat-form-field appearance="fill" style="width: 100%;">
+                <mat-label>Filtro por nombre</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Filtro por nombre" autocomplete="off">
+            </mat-form-field>
+        </div>
+        <div class="col-lg-2" style="text-align: right;">
+            <mat-form-field appearance="fill" style="width: 100%;">
+                <mat-label>Filtro por existencias</mat-label>
+                <input matInput (keyup)="applyFilterExistencias($event)" placeholder="Filtro por existencias" autocomplete="off">
+            </mat-form-field>
+        </div>
+        <div class="col-lg-2" style="text-align: right;">
+            <mat-form-field appearance="fill" style="width: 100%;">
+                <mat-label>Selecciona una categoria</mat-label>
+                <mat-select [(ngModel)]="categoriaSelect" (ngModelChange)="filterByCategoria($event)" name="categoria">
+                    <mat-option *ngFor="let cate of categoriasList" [value]="cate.nombre">
+                        {{cate.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'" class="col-lg-2">
+            <button mat-raised-button color="primary" (click)="addInventarioExcel()">Cargar Inventario</button>
+        </div>
+        <div *ngIf="rol == 'SuperAdmin'" class="col-lg-2">
+            <button mat-raised-button color="primary" (click)="eliminarInventario()">Eliminar Inventario</button>
+        </div>
+        <div *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'" class="col-lg-2">
+            <button mat-raised-button color="primary" (click)="addProduct()">Agregar Producto</button>
+        </div>
+        <div *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'" class="col-lg-2">
+            <button mat-raised-button color="primary" (click)="descargarExcel()">Descargar Inventario</button>
+        </div>
+        <div *ngIf="rol == 'SuperAdmin'" class="col-lg-3" style="text-align: right;">
+            <button mat-raised-button color="primary" (click)="descargarReporteVentas()">Descargar Reporte ventas</button>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 15px; margin-bottom: 10px;">
+        <div *ngIf="rol == 'SuperAdmin'" class="col-lg-3">
+            <button mat-raised-button color="primary" (click)="descargarReporteCompras()">Descargar Reporte compras</button>
+        </div>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tablavg" matSort style="margin-bottom: 25px;">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="codigo">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Codigo </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.serie}} </td>
+        </ng-container>
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="categoria">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Categoria </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.categoria}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Nombre </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.nombre}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="descripcion">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Descripcion </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.descripcion}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Estado </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.estado}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="precioregular">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Precio Regular </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;"> {{ element.precioregular | currency }} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="preciooferta">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Precio Oferta </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;"> {{ element.preciooferta | currency }} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="existencia">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Existencia </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;"> {{ element.existencia }} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="modificado">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Modificado </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.datemod | date:'dd/MM/yyyy HH:mm'}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="options">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Opciones </th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;">
+                <mat-icon *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'" matTooltip="Editar" class="micon" (click)="editProduct(element)">border_color</mat-icon>
+                <mat-icon *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'" matTooltip="Eliminar" class="micon" (click)="deleteProduct(element)">delete</mat-icon>
+                <mat-icon *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'" matTooltip="Trasladar" class="micon" (click)="trasladarProduct(element)">swap_horizontal_circle</mat-icon>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons></mat-paginator>
+</div>

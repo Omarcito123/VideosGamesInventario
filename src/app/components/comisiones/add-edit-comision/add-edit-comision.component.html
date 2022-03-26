@@ -1,0 +1,41 @@
+<h1 mat-dialog-title>Agregar comision</h1>
+<div mat-dialog-content>
+    <form [formGroup]="addComisionForm" style="margin-bottom: 40px; min-width: 350px;">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Selecciona el tipo de comisión</mat-label>
+                    <mat-select [(ngModel)]="comision.tipocomision" name="tipocomision" formControlName="tipocomision">
+                        <mat-option *ngFor="let valor of listaTipoComisiones" [value]="valor.description">
+                            {{valor.description}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Selecciona una unidad</mat-label>
+                    <mat-select [(ngModel)]="comision.unidad" name="unidad" formControlName="unidad">
+                        <mat-option *ngFor="let valor of listaUnidades" [value]="valor.description">
+                            {{valor.description}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group col-md-6">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Valor</mat-label>
+                    <input matInput placeholder="Ingresa el valor" type="number" [(ngModel)]="comision.valor" formControlName="valor">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row" style="float: right;">
+            <div class="example-button-row">
+                <button mat-flat-button color="warn" (click)="onNoClick()" style="margin-right: 20px;">Cancelar</button>
+                <button mat-flat-button color="primary" (click)="saveComision()">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
