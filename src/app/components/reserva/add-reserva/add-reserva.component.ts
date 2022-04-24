@@ -58,12 +58,12 @@ export class AddReservaComponent implements OnInit {
     this.ventaInv.preciototal = 0;
   }
 
-  getCategoriasList() {
+  getCategoriasList(): void {
     this.SpinnerService.show();
     this.api.getCategoriasList().subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.categoriasList = response.data;
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
@@ -82,13 +82,13 @@ export class AddReservaComponent implements OnInit {
     );
   }
 
-  calcularTotalProd() {
+  calcularTotalProd(): void {
     this.ventaInv.preciototal =
       this.ventaInv.cantidad * this.ventaInv.preciounitario -
       this.ventaInv.descuento;
   }
 
-  getTipoPagoList() {
+  getTipoPagoList(): void {
     this.tipoPagoList = [
       { value: 1, description: 'Tarjeta' },
       { value: 2, description: 'Efectivo' },
@@ -97,7 +97,7 @@ export class AddReservaComponent implements OnInit {
     ];
   }
 
-  getPostList() {
+  getPostList(): void {
     this.tipoPostList = [
       { value: 1, description: 'Agricola' },
       { value: 2, description: 'Credomatic' },
@@ -106,7 +106,7 @@ export class AddReservaComponent implements OnInit {
     ];
   }
 
-  getComprobanteList() {
+  getComprobanteList(): void {
     this.comprobantesList = [
       { value: 1, description: 'Factura' },
       { value: 2, description: 'Sin Recibo' },
@@ -114,17 +114,17 @@ export class AddReservaComponent implements OnInit {
     ];
   }
 
-  agregarReserva() {
+  agregarReserva(): void {
     this.ventaList = [];
     if (this.addReservaForm.valid) {
       this.SpinnerService.show();
       if (
-        this.selectedComprobante == 'Factura'
+        this.selectedComprobante === 'Factura'
       ) {
         if (
           this.ventaInv.factura == null ||
-          this.ventaInv.factura == undefined ||
-          this.ventaInv.factura == ''
+          this.ventaInv.factura === undefined ||
+          this.ventaInv.factura === ''
         ) {
           this.api.openSnackBar(
             'Ingrese el numero de la factura',
@@ -135,12 +135,12 @@ export class AddReservaComponent implements OnInit {
         }
       }
       if (
-        this.selectedComprobante == 'Recibo'
+        this.selectedComprobante === 'Recibo'
       ) {
         if (
           this.ventaInv.recibo == null ||
-          this.ventaInv.recibo == undefined ||
-          this.ventaInv.recibo == ''
+          this.ventaInv.recibo === undefined ||
+          this.ventaInv.recibo === ''
         ) {
           this.api.openSnackBar(
             'Ingrese el numero del recibo',
@@ -151,23 +151,23 @@ export class AddReservaComponent implements OnInit {
         }
       }
       if (
-        this.selectedComprobante == 'Factura'
+        this.selectedComprobante === 'Factura'
       ) {
-        this.ventaInv.recibo = "";
+        this.ventaInv.recibo = '';
       }
       if (
-        this.selectedComprobante == 'Recibo'
+        this.selectedComprobante === 'Recibo'
       ) {
-        this.ventaInv.factura = "";
+        this.ventaInv.factura = '';
       }
       if (
-        this.selectedComprobante == 'Sin Recibo'
+        this.selectedComprobante === 'Sin Recibo'
       ) {
-        this.ventaInv.factura = "";
-        this.ventaInv.recibo = "";
+        this.ventaInv.factura = '';
+        this.ventaInv.recibo = '';
       }
-      this.ventaInv.tipoventa = "Reserva";
-      this.ventaInv.estadoreserva = "Reserva";
+      this.ventaInv.tipoventa = 'Reserva';
+      this.ventaInv.estadoreserva = 'Reserva';
       this.ventaInv.idproducto = 0;
       this.ventaInv.idsucursal = this.userSesion.idsucursal;
       this.ventaInv.iduseradd = this.userSesion.iduser;
@@ -176,7 +176,7 @@ export class AddReservaComponent implements OnInit {
       this.api.createVenta(this.ventaList).subscribe(
         (response) => {
           if (response != null) {
-            if (response.state == 'Success') {
+            if (response.state === 'Success') {
               this.clearReserva();
               this.api.openSnackBar(
                 'Reserva realizada exitosamente',
@@ -203,7 +203,7 @@ export class AddReservaComponent implements OnInit {
     }
   }
 
-  clearReserva() {
+  clearReserva(): void {
     this.ventaInv = new venta();
     this.ventaList = [];
   }

@@ -76,18 +76,18 @@ export class AddEditUserComponent implements OnInit {
     }
   }
 
-  showHidenPass() {
+  showHidenPass(): void {
     this.hide = !this.hide;
   }
 
-  getEstadosList() {
+  getEstadosList(): void {
     this.listaEstados = [
       { value: 1, description: 'Habilitar' },
       { value: 0, description: 'Deshabilitar' },
     ];
   }
 
-  getRolesList() {
+  getRolesList(): void {
     this.listaRoles = [
       { value: 1, description: 'Administrador' },
       { value: 2, description: 'Vendedor' },
@@ -96,12 +96,12 @@ export class AddEditUserComponent implements OnInit {
     ];
   }
 
-  getSucursalesList() {
+  getSucursalesList(): void {
     this.SpinnerService.show();
     this.api.getSucursales().subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.sucursalesList = response.data;
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
@@ -124,7 +124,7 @@ export class AddEditUserComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  saveUser() {
+  saveUser(): void {
     if (this.addUserForm.valid) {
       this.usuario.active = this.selectedEstado;
       this.usuario.idrol = this.selectedRol;
@@ -134,7 +134,7 @@ export class AddEditUserComponent implements OnInit {
         this.api.saveUserInv(this.usuario).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == 'Success') {
+              if (response.state === 'Success') {
                 this.dialogRef.close();
                 this.api.openSnackBar(response.message, 'X', 'success');
               } else {
@@ -160,7 +160,7 @@ export class AddEditUserComponent implements OnInit {
         this.api.updateUserInv(this.usuario).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == 'Success') {
+              if (response.state === 'Success') {
                 this.dialogRef.close();
                 this.api.openSnackBar(
                   'Usuario modificado exitosamente',

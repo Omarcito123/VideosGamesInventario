@@ -4,7 +4,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { NgxSpinnerService } from "ngx-spinner"; 
+import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from 'src/app/services/auth.service';
 import { ApiService } from 'src/app/services/api.service';
 import { userInv } from 'src/app/models/userInv';
@@ -32,81 +32,82 @@ export class ListComprasComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private datePipe: DatePipe, private api: ApiService, public dialog: MatDialog, private SpinnerService: NgxSpinnerService, private authService: AuthService) { }
+  constructor(private datePipe: DatePipe, private api: ApiService, public dialog: MatDialog,
+              private SpinnerService: NgxSpinnerService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.userSesion = this.authService.currentUserValue;
     this.getUserList();
   }
 
-  applyFilter(event: Event){
+  applyFilter(event: Event): void{
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  getUserList() {
-    this.SpinnerService.show();  
-      this.api.getUserList().subscribe(
+  getUserList(): void {
+    this.SpinnerService.show();
+    this.api.getUserList().subscribe(
         (response) => {
           if (response != null) {
-            if (response.state == "Success") {
-              this.usersList = response.data;                         
+            if (response.state === 'Success') {
+              this.usersList = response.data;
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
           }
-          this.SpinnerService.hide(); 
+          this.SpinnerService.hide();
         },
         (error) => {
-          this.SpinnerService.hide(); 
-          if(error.includes("403")){
+          this.SpinnerService.hide();
+          if (error.includes('403')){
             this.authService.logout();
           }
         }
       );
   }
 
-  getComprasBySucursal() {
-    this.SpinnerService.show(); 
-    var compraId = new compra();
+  getComprasBySucursal(): void {
+    this.SpinnerService.show();
+    const compraId = new compra();
     compraId.idsucursal = this.userSesion.idsucursal;
     compraId.iduseradd = this.selectedUser;
     compraId.dateadd = this.datePipe.transform(this.dateCompra, 'yyyy/MM/dd');
     compraId.datemod = this.datePipe.transform(this.dateCompra2, 'yyyy/MM/dd');
-      this.api.getListComprasBySucursalAndByVendedor(compraId).subscribe(
+    this.api.getListComprasBySucursalAndByVendedor(compraId).subscribe(
         (response) => {
           if (response != null) {
-            if (response.state == "Success") {
+            if (response.state === 'Success') {
               this.comprasBySucursalList = response.data;
               this.montoTotalCompras();
               this.dataSource = new MatTableDataSource(this.comprasBySucursalList);
               this.dataSource.paginator = this.paginator;
-              this.dataSource.sort = this.sort;                      
+              this.dataSource.sort = this.sort;
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
           }
-          this.SpinnerService.hide(); 
+          this.SpinnerService.hide();
         },
         (error) => {
-          this.SpinnerService.hide(); 
-          if(error.includes("403")){
+          this.SpinnerService.hide();
+          if (error.includes('403')){
             this.authService.logout();
           }
         }
       );
   }
 
-  montoTotalCompras(){
+  montoTotalCompras(): void{
     this.totalCompras = this.comprasBySucursalList.filter(item => item.total != null)
                         .reduce((sum, current) => sum + current.total, 0);
   }
 
-  deleteCompra(compraDelete: compra){
+  deleteCompra(compraDelete: compra): void{
     const dialogRef = this.dialog.open(DialogConfirmacionComponent, {
       width: '350px',
       data: {mensaje: 'Esta seguro que desea eliminar la compra?'}
@@ -114,11 +115,11 @@ export class ListComprasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'aceptar') {
-        this.SpinnerService.show();   
+        this.SpinnerService.show();
         this.api.deleteCompra(compraDelete).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == "Success") {
+              if (response.state === 'Success') {
                 this.getComprasBySucursal();
                 this.api.openSnackBar('La compra fue eliminada con exito!', 'X', 'success');
               } else {
@@ -127,10 +128,10 @@ export class ListComprasComponent implements OnInit {
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
           },
           (error) => {
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
             this.api.openSnackBar(error, 'X', 'error');
           }
         );

@@ -53,14 +53,14 @@ export class AddEditReparacionComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  saveRep() {
+  saveRep(): void {
     if (this.addReparacionForm.valid) {
       if (this.isNew) {
         this.SpinnerService.show();
         this.api.saveReparacionInv(this.reparacion).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == 'Success') {
+              if (response.state === 'Success') {
                 this.dialogRef.close();
                 this.api.openSnackBar(response.message, 'X', 'success');
               } else {
@@ -84,7 +84,7 @@ export class AddEditReparacionComponent implements OnInit {
         this.api.updateReparaionInv(this.reparacion).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == 'Success') {
+              if (response.state === 'Success') {
                 this.dialogRef.close();
                 this.api.openSnackBar(
                   'Reparacion modificada exitosamente',

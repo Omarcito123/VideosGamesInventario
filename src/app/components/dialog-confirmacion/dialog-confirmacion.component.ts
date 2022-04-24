@@ -12,7 +12,7 @@ export class DialogConfirmacionComponent implements OnInit {
   btn = 'aceptar';
 
   constructor(public dialogRef: MatDialogRef<DialogConfirmacionComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) { 
+              @Inject(MAT_DIALOG_DATA) public data: any) {
                 this.mensaje = data.mensaje;
               }
 

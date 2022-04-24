@@ -52,17 +52,17 @@ export class VerPedidoSucursalComponent implements OnInit {
     this.getSucursales();
   }
 
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  getSucursales() {
+  getSucursales(): void {
     this.SpinnerService.show();
     this.api.getSucursales().subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.sucursalesList = response.data;
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
@@ -81,13 +81,14 @@ export class VerPedidoSucursalComponent implements OnInit {
     );
   }
 
-  getPedidosListBySucursal() {
+  getPedidosListBySucursal(): void {
+    this.pedidosTrasladarList = [];
     this.SpinnerService.show();
     this.pedido.idsucursal = this.selectedSucursal;
     this.api.getPedidosListBySucursal(this.pedido).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.pedidosList = response.data;
             this.dataSource = new MatTableDataSource(this.pedidosList);
             this.dataSource.paginator = this.paginator;
@@ -109,80 +110,76 @@ export class VerPedidoSucursalComponent implements OnInit {
     );
   }
 
-  setEntregar(event, element) {
+  setEntregar(event, element): void {
     if (event) {
       this.pedidosTrasladarList.push(element);
     } else {
       this.pedidosTrasladarList.forEach((value, index) => {
-        if (value.idpedidoinv == element.idpedidoinv) {
+        if (value.idpedidoinv === element.idpedidoinv) {
           this.pedidosTrasladarList.splice(index, 1);
         }
       });
     }
   }
 
-  entregarProductos(){
+  entregarProductos(): void{
     this.pedidosTrasladarList.forEach((value, index) => {
-      if(value.cantidad > value.existenciabodega){
+      if (value.cantidad > value.existenciabodega){
         this.api.openSnackBar('La cantidad ingresa es mayor a la existencia del producto: ' + value.nombreproducto, 'X', 'error');
       }else{
         this.trasladarProducto(value);
       }
-    });    
+    });
+    this.pedidosTrasladarList = [];
   }
 
-  trasladarProducto(pedido: pedidoInv) {
+  async trasladarProducto(pedido: pedidoInv): Promise<void> {
+    this.productTras = new producto();
     this.SpinnerService.show();
     this.productTras.idsucursal = this.selectedSucursal;
     this.productTras.existencia = pedido.cantidad;
     this.productTras.nombre = pedido.nombreproducto;
     this.productTras.idprodinv = pedido.idprodinv;
     this.productTras.iduseradd = this.userSesion.iduser;
-    this.api.trasladarProducto(this.productTras).subscribe(
-      (response) => {
-        if (response != null) {
-          if (response.state == 'Success') {
-            this.api.openSnackBar("Producto " + pedido.nombreproducto + " entregado exitosamente", 'X', 'success');
-            this.updatePedidoInv(pedido);
-          } else {
-            this.api.openSnackBar(response.message, 'X', 'error');
-          }
+    const response = await this.api.trasladarProducto(this.productTras).toPromise();
+    if (response) {
+      if (response != null) {
+        if (response.state === 'Success') {
+          this.api.openSnackBar('Producto ' + pedido.nombreproducto + ' entregado exitosamente', 'X', 'success');
+          this.updatePedidoInv(pedido);
         } else {
           this.api.openSnackBar(response.message, 'X', 'error');
         }
-        this.SpinnerService.hide();
-      },
-      (error) => {
-        this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
+      } else {
+        this.api.openSnackBar(response.message, 'X', 'error');
       }
-    );
+      this.SpinnerService.hide();
+    } else {
+      this.SpinnerService.hide();
+    }
   }
 
-  updatePedidoInv(pedido: pedidoInv){
-    var myDate = new Date();
+  updatePedidoInv(pedido: pedidoInv): void{
+    const myDate = new Date();
     pedido.fechaentrega = this.datePipe.transform(myDate, 'yyyy/MM/dd');
     pedido.estado = 'entregado';
     this.SpinnerService.show();
-        this.api.updatePedidoInv(pedido).subscribe(
+    this.api.updatePedidoInv(pedido).subscribe(
           (response) => {
-            if (response != null) {            
-              if (response.state == "Success") {
+            if (response != null) {
+              if (response.state === 'Success') {
                 this.getPedidosListBySucursal();
-                //this.api.openSnackBar("Producto modificado exitosamente", 'X', 'success');
               } else {
                 this.api.openSnackBar(response.message, 'X', 'error');
               }
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
           },
           (error) => {
-            this.SpinnerService.hide(); 
-            if(error.includes("403")){
+            this.SpinnerService.hide();
+            if (error.includes('403')){
               this.authService.logout();
             }
           }

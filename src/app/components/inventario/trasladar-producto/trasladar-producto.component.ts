@@ -1,9 +1,9 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { sucursales } from 'src/app/models/sucursales'
+import { sucursales } from 'src/app/models/sucursales';
 import { ApiService } from 'src/app/services/api.service';
-import { NgxSpinnerService } from "ngx-spinner"; 
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { FormBuilder } from '@angular/forms';
 import { producto } from '../../../models/producto';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -27,12 +27,13 @@ export class TrasladarProductoComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<TrasladarProductoComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private fb: FormBuilder, private api: ApiService, private SpinnerService: NgxSpinnerService, private authService: AuthService) {
+    @Inject(MAT_DIALOG_DATA) public data: any, private fb: FormBuilder,
+    private api: ApiService, private SpinnerService: NgxSpinnerService, private authService: AuthService) {
     }
 
   ngOnInit(): void {
     this.getSucursales();
-    if(this.data != null){
+    if (this.data != null){
       this.userSesion = this.authService.currentUserValue;
       this.productTras.idprodinv = this.data.idprodinv;
       this.productTras.categoria = this.data.categoria;
@@ -51,40 +52,40 @@ export class TrasladarProductoComponent implements OnInit {
     }
   }
 
-  toggleSelectOne(){
-    if(this.allSelected){
-      this.selectedSucursal = this.selectedSucursal.filter(x => x != 0);  
+  toggleSelectOne(): void{
+    if (this.allSelected){
+      this.selectedSucursal = this.selectedSucursal.filter(x => x !== 0);
     }
     this.allSelected = !this.allSelected;
   }
 
-  async trasladarProduct(){
+  async trasladarProduct(): Promise<void>{
     this.bandera = 0;
-    if(this.cantidad == 0){
+    if (this.cantidad === 0){
       this.api.openSnackBar('Ingresa la cantida de productos a trasladar', 'X', 'error');
-    }else if(this.selectedSucursal == null){
+    }else if (this.selectedSucursal == null){
       this.api.openSnackBar('Selecciona la sucursal de destino', 'X', 'error');
-    }else if(this.selectedSucursal == undefined){
+    }else if (this.selectedSucursal === undefined){
       this.api.openSnackBar('Selecciona la sucursal de destino', 'X', 'error');
-    }else if(this.selectedSucursal.length == 0){
+    }else if (this.selectedSucursal.length === 0){
       this.api.openSnackBar('Selecciona la sucursal de destino', 'X', 'error');
-    }else if((this.cantidad * this.selectedSucursal.length)  > this.productTras.existencia){
+    }else if ((this.cantidad * this.selectedSucursal.length)  > this.productTras.existencia){
       this.api.openSnackBar('No hay la cantidad de productos suficientes en la sucursal de origen para el traslado', 'X', 'error');
     }else{
       this.trasladados = 0;
       this.SpinnerService.show();
-      this.selectedSucursal.forEach(async idSucur => {   
-        if(idSucur != 0){
+      this.selectedSucursal.forEach(async idSucur => {
+        if (idSucur !== 0){
           this.productTras.idsucursal = idSucur;
           this.productTras.existencia = this.cantidad;
           await this.api.traslaProductoSucursales(this.productTras).subscribe(
             (response) => {
               this.bandera = this.bandera + 1;
               if (response != null) {
-                if (response.state == "Success") {
-                  this.sucursalesList = response.data;                
+                if (response.state === 'Success') {
+                  this.sucursalesList = response.data;
                   this.trasladados = this.trasladados + 1;
-                  if(this.selectedSucursal.length == this.bandera){
+                  if (this.selectedSucursal.length === this.bandera){
                     this.updateExistenciaBodega();
                   }
                   this.api.openSnackBar(response.message, 'X', 'success');
@@ -95,11 +96,11 @@ export class TrasladarProductoComponent implements OnInit {
               } else {
                 this.api.openSnackBar(response.message, 'X', 'error');
               }
-              this.SpinnerService.hide(); 
+              this.SpinnerService.hide();
             },
             (error) => {
-              this.SpinnerService.hide(); 
-              if(error.includes("403")){
+              this.SpinnerService.hide();
+              if (error.includes('403')){
                 this.authService.logout();
               }
             }
@@ -109,13 +110,13 @@ export class TrasladarProductoComponent implements OnInit {
     }
   }
 
-  updateExistenciaBodega(){
-    if(this.trasladados > 0){
+  updateExistenciaBodega(): void{
+    if (this.trasladados > 0){
       this.productTras.existencia = this.cantidad * this.trasladados;
       this.api.updateExistenciasBodega(this.productTras).subscribe(
         (response) => {
           if (response != null) {
-            if (response.state == "Success") {
+            if (response.state === 'Success') {
               this.sucursalesList = response.data;
               this.trasladados++;
               this.api.openSnackBar(response.message, 'X', 'success');
@@ -126,59 +127,59 @@ export class TrasladarProductoComponent implements OnInit {
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
           }
-          this.SpinnerService.hide(); 
+          this.SpinnerService.hide();
         },
         (error) => {
-          this.SpinnerService.hide(); 
-          if(error.includes("403")){
+          this.SpinnerService.hide();
+          if (error.includes('403')){
             this.authService.logout();
           }
         }
       );
-    }   
+    }
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  getSucursales() {
-    this.SpinnerService.show();  
-      this.api.getSucursales().subscribe(
+  getSucursales(): void {
+    this.SpinnerService.show();
+    this.api.getSucursales().subscribe(
         (response) => {
           if (response != null) {
-            if (response.state == "Success") {
+            if (response.state === 'Success') {
               this.sucursalesList = response.data;
-              this.nombreSucursal = this.sucursalesList.filter(item => item.idsucursal == this.productTras.idsucursal)
+              this.nombreSucursal = this.sucursalesList.filter(item => item.idsucursal === this.productTras.idsucursal)
                         .find(i => i).nombre;
-              this.sucursalesList = this.sucursalesList.filter(item => item.idsucursal != this.productTras.idsucursal);
+              this.sucursalesList = this.sucursalesList.filter(item => item.idsucursal !== this.productTras.idsucursal);
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
           }
-          this.SpinnerService.hide(); 
+          this.SpinnerService.hide();
         },
         (error) => {
-          this.SpinnerService.hide(); 
-          if(error.includes("403")){
+          this.SpinnerService.hide();
+          if (error.includes('403')){
             this.authService.logout();
           }
         }
       );
   }
 
-  toggleSelectAll(){
+  toggleSelectAll(): void{
     this.allSelected = !this.allSelected;
     this.sucurslesId = [];
     this.selectedSucursal = [];
-    if(this.allSelected){
+    if (this.allSelected){
       this.selectedSucursal.push(0);
-      this.sucursalesList .forEach(element => {        
+      this.sucursalesList .forEach(element => {
         this.sucurslesId.push(element.idsucursal);
-        this.selectedSucursal.push(element.idsucursal);         
-      });    
+        this.selectedSucursal.push(element.idsucursal);
+      });
     }
   }
 }

@@ -2,7 +2,7 @@ import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/api.service';
-import { NgxSpinnerService } from "ngx-spinner"; 
+import { NgxSpinnerService } from 'ngx-spinner';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { perfil } from '../../models/perfil';
@@ -23,7 +23,8 @@ export class MiPerfilComponent implements OnInit {
   user = new userInv();
   rol = '';
 
-  constructor(private fb: FormBuilder, private api: ApiService, public dialog: MatDialog, private SpinnerService: NgxSpinnerService, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private api: ApiService, public dialog: MatDialog,
+              private SpinnerService: NgxSpinnerService, private authService: AuthService) {
       this.perfilForm = this.fb.group({
         firstname: ['', [Validators.required, Validators.maxLength(30)]],
         secondname: ['',  [Validators.required, Validators.maxLength(30)]],
@@ -45,16 +46,16 @@ export class MiPerfilComponent implements OnInit {
     this.geInfoPerfil();
   }
 
-  showHidenPass() {
-    this.hide = !this.hide;   
+  showHidenPass(): void {
+    this.hide = !this.hide;
   }
 
-  geInfoPerfil(){
+  geInfoPerfil(): void{
     this.SpinnerService.show();
-        this.api.geInfoPerfil(this.user).subscribe(
+    this.api.geInfoPerfil(this.user).subscribe(
           (response) => {
-            if (response != null) {            
-              if (response.state == "Success") {
+            if (response != null) {
+              if (response.state === 'Success') {
                 this.myPerfil = response.data;
               } else {
                 this.api.openSnackBar(response.message, 'X', 'error');
@@ -62,18 +63,18 @@ export class MiPerfilComponent implements OnInit {
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
           },
           (error) => {
-            this.SpinnerService.hide(); 
-            if(error.includes("403")){
+            this.SpinnerService.hide();
+            if (error.includes('403')){
               this.authService.logout();
             }
           }
         );
   }
 
-  changePass(): void {    
+  changePass(): void {
     const dialogRef = this.dialog.open(ChangePassComponent, {
       data: null
     });
@@ -84,7 +85,7 @@ export class MiPerfilComponent implements OnInit {
     });
   }
 
-  updatePerfil(){    
+  updatePerfil(): void{
     this.user.iduser = this.myPerfil.iduser;
     this.user.firstname = this.myPerfil.firstname;
     this.user.secondname = this.myPerfil.secondname;
@@ -96,8 +97,8 @@ export class MiPerfilComponent implements OnInit {
     this.SpinnerService.show();
     this.api.updatePerfil(this.user).subscribe(
       (response) => {
-        if (response != null) {            
-          if (response.state == "Success") {
+        if (response != null) {
+          if (response.state === 'Success') {
             this.api.openSnackBar(response.message, 'X', 'success');
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
@@ -105,11 +106,11 @@ export class MiPerfilComponent implements OnInit {
         } else {
           this.api.openSnackBar(response.message, 'X', 'error');
         }
-        this.SpinnerService.hide(); 
+        this.SpinnerService.hide();
       },
       (error) => {
-        this.SpinnerService.hide(); 
-        if(error.includes("403")){
+        this.SpinnerService.hide();
+        if (error.includes('403')){
           this.authService.logout();
         }
       }

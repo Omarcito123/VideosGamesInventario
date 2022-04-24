@@ -1,7 +1,7 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/api.service';
-import { NgxSpinnerService } from "ngx-spinner"; 
+import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -20,7 +20,8 @@ export class ChangePassComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ChangePassComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private api: ApiService, private SpinnerService: NgxSpinnerService, private authService: AuthService) {
+    @Inject(MAT_DIALOG_DATA) public data: any, private api: ApiService,
+    private SpinnerService: NgxSpinnerService, private authService: AuthService) {
     }
 
   ngOnInit(): void {
@@ -30,30 +31,30 @@ export class ChangePassComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  showHidenPass(){
+  showHidenPass(): void{
     this.hide = !this.hide;
   }
 
-  showHidenPass2(){
+  showHidenPass2(): void{
     this.hide2 = !this.hide2;
   }
 
-  showHidenPass3(){
+  showHidenPass3(): void{
     this.hide3 = !this.hide3;
   }
 
-  changePass(){
-    if(this.actual == '' || this.nueva == '' || this.confirma == ''){
+  changePass(): void{
+    if (this.actual === '' || this.nueva === '' || this.confirma === ''){
       this.api.openSnackBar('Todos los campos son requeridos', 'X', 'error');
     }else{
-      if(this.nueva != this.confirma){
+      if (this.nueva !== this.confirma){
         this.api.openSnackBar('La nueva contraseña y la confirmacion no coinciden', 'X', 'error');
       }else{
         this.SpinnerService.show();
         this.api.changePass(this.actual, this.nueva).subscribe(
           (response) => {
-            if (response != null) {            
-              if (response.state == "Success") {
+            if (response != null) {
+              if (response.state === 'Success') {
                 this.api.openSnackBar(response.message, 'X', 'success');
                 this.onNoClick();
               } else {
@@ -62,15 +63,15 @@ export class ChangePassComponent implements OnInit {
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
           },
           (error) => {
-            this.SpinnerService.hide(); 
-            if(error.includes("403")){
+            this.SpinnerService.hide();
+            if (error.includes('403')){
               this.authService.logout();
             }
           }
-        );      
+        );
       }
     }
   }

@@ -1,10 +1,8 @@
 import { sucursales } from '../../../models/sucursales';
-import { userInv } from './../../../models/userInv';
 import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { lista } from '../../../models/lista';
 import { ApiService } from 'src/app/services/api.service';
-import { NgxSpinnerService } from "ngx-spinner"; 
+import { NgxSpinnerService } from 'ngx-spinner';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -22,7 +20,8 @@ export class AddEditSucursalComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddEditSucursalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private fb: FormBuilder, private api: ApiService, private SpinnerService: NgxSpinnerService, private authService: AuthService) {
+    @Inject(MAT_DIALOG_DATA) public data: any, private fb: FormBuilder,
+    private api: ApiService, private SpinnerService: NgxSpinnerService, private authService: AuthService) {
       this.addEditSucursalForm = this.fb.group({
         nombre: ['', [Validators.required, Validators.maxLength(60)]],
       });
@@ -30,7 +29,7 @@ export class AddEditSucursalComponent implements OnInit {
 
   ngOnInit(): void {
     this.headerText = 'Agregar sucursal';
-    if(this.data != null){
+    if (this.data != null){
       this.sucursal.idsucursal = this.data.idsucursal;
       this.sucursal.nombre = this.data.nombre;
       this.sucursal.dateadd = this.data.dateadd;
@@ -46,14 +45,14 @@ export class AddEditSucursalComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  saveUpdateSucursal(){
-    if(this.addEditSucursalForm.valid){
-      if(this.isNewSucursal){
+  saveUpdateSucursal(): void{
+    if (this.addEditSucursalForm.valid){
+      if (this.isNewSucursal){
         this.SpinnerService.show();
         this.api.saveSucursalInv(this.sucursal).subscribe(
           (response) => {
-            if (response != null) {            
-              if (response.state == "Success") {
+            if (response != null) {
+              if (response.state === 'Success') {
                 this.dialogRef.close();
                 this.api.openSnackBar(response.message, 'X', 'success');
               } else {
@@ -62,11 +61,11 @@ export class AddEditSucursalComponent implements OnInit {
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
           },
           (error) => {
-            this.SpinnerService.hide(); 
-            if(error.includes("403")){
+            this.SpinnerService.hide();
+            if (error.includes('403')){
               this.authService.logout();
             }
           }
@@ -75,28 +74,28 @@ export class AddEditSucursalComponent implements OnInit {
         this.SpinnerService.show();
         this.api.updateSucursalInv(this.sucursal).subscribe(
           (response) => {
-            if (response != null) {            
-              if (response.state == "Success") {
+            if (response != null) {
+              if (response.state === 'Success') {
                 this.dialogRef.close();
-                this.api.openSnackBar("Sucursal modificada exitosamente", 'X', 'success');
+                this.api.openSnackBar('Sucursal modificada exitosamente', 'X', 'success');
               } else {
                 this.api.openSnackBar(response.message, 'X', 'error');
               }
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
           },
           (error) => {
-            this.SpinnerService.hide(); 
-            if(error.includes("403")){
+            this.SpinnerService.hide();
+            if (error.includes('403')){
               this.authService.logout();
             }
           }
         );
       }
     }else{
-      this.api.openSnackBar("Ingresa los campos requeridos", 'X', 'error');
+      this.api.openSnackBar('Ingresa los campos requeridos', 'X', 'error');
     }
   }
 }

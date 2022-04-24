@@ -19,8 +19,8 @@ export class PedidosComponent implements OnInit {
     this.rol = this.userSesion.rolname;
   }
 
-  onTabClick(event){
-    if(event.index == 0){
+  onTabClick(event): void{
+    if(event.index === 0){
       this.isActive = true;
     }else{
       this.isActive = false;

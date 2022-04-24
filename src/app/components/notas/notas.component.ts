@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { NgxSpinnerService } from "ngx-spinner"; 
+import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from 'src/app/services/auth.service';
 import { ApiService } from 'src/app/services/api.service';
 import { userInv } from 'src/app/models/userInv';
@@ -34,82 +34,82 @@ export class NotasComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private datePipe: DatePipe, private api: ApiService, public dialog: MatDialog, private SpinnerService: NgxSpinnerService, private authService: AuthService) { }
+  constructor(private datePipe: DatePipe, private api: ApiService, public dialog: MatDialog,
+              private SpinnerService: NgxSpinnerService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.userSesion = this.authService.currentUserValue;
-    //this.ventasVen.iduseradd = this.userSesion.iduser;
     this.rol = this.userSesion.rolname;
     this.username = this.userSesion.username;
     this.getUserList();
   }
 
-  applyFilter(event: Event){
+  applyFilter(event: Event): void{
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  getUserList() {
-    this.SpinnerService.show();  
-      this.api.getUserList().subscribe(
+  getUserList(): void {
+    this.SpinnerService.show();
+    this.api.getUserList().subscribe(
         (response) => {
           if (response != null) {
-            if (response.state == "Success") {
-              if(this.rol == 'SuperAdmin' || this.rol == 'Administrador'){
-                this.usersList = response.data; 
+            if (response.state === 'Success') {
+              if (this.rol === 'SuperAdmin' || this.rol === 'Administrador'){
+                this.usersList = response.data;
               }else{
                 this.usersList = response.data;
                 this.usersList = this.usersList.filter((option) => option.username.includes(this.username));
-              }                                      
+              }
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
           }
-          this.SpinnerService.hide(); 
+          this.SpinnerService.hide();
         },
         (error) => {
-          this.SpinnerService.hide(); 
-          if(error.includes("403")){
+          this.SpinnerService.hide();
+          if (error.includes('403')){
             this.authService.logout();
           }
         }
       );
   }
 
-  getNotasBySucursal(){
-    this.SpinnerService.show(); 
-    var notaInv = new notas();
+  getNotasBySucursal(): void{
+    this.SpinnerService.show();
+    const notaInv = new notas();
     notaInv.iduseradd = this.selectedUser;
     notaInv.dateadd = this.datePipe.transform(this.dateCompra, 'yyyy/MM/dd');
     notaInv.datemod = this.datePipe.transform(this.dateCompra2, 'yyyy/MM/dd');
-      this.api.getListNotasByUserAndDates(notaInv).subscribe(
+    this.api.getListNotasByUserAndDates(notaInv).subscribe(
         (response) => {
           if (response != null) {
-            if (response.state == "Success") {
+            if (response.state === 'Success') {
               this.notasLis = response.data;
               this.dataSource = new MatTableDataSource(this.notasLis);
               this.dataSource.paginator = this.paginator;
-              this.dataSource.sort = this.sort;                      
+              this.dataSource.sort = this.sort;
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
           }
-          this.SpinnerService.hide(); 
+          this.SpinnerService.hide();
         },
         (error) => {
-          this.SpinnerService.hide(); 
-          if(error.includes("403")){
+          this.SpinnerService.hide();
+          if (error.includes('403')){
             this.authService.logout();
           }
         }
       );
   }
 
-  addNota(): void {    
+  addNota(): void {
     const dialogRef = this.dialog.open(AddEditNotaComponent, {
       data: null
     });
@@ -120,7 +120,7 @@ export class NotasComponent implements OnInit {
     });
   }
 
-  editNota(notaEdit: any){
+  editNota(notaEdit: any): void{
     const dialogRef = this.dialog.open(AddEditNotaComponent, {
       data: notaEdit
     });
@@ -131,7 +131,7 @@ export class NotasComponent implements OnInit {
     });
   }
 
-  deleteNota(notaDe: any){
+  deleteNota(notaDe: any): void{
     const dialogRef = this.dialog.open(DialogConfirmacionComponent, {
       width: '350px',
       data: {mensaje: 'Esta seguro que desea eliminar la nota?'}
@@ -139,11 +139,11 @@ export class NotasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'aceptar') {
-        this.SpinnerService.show();   
+        this.SpinnerService.show();
         this.api.deleteNota(notaDe).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == "Success") {
+              if (response.state === 'Success') {
                 this.getNotasBySucursal();
                 this.api.openSnackBar('La nota fue eliminada con exito!', 'X', 'success');
               } else {
@@ -152,10 +152,10 @@ export class NotasComponent implements OnInit {
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
           },
           (error) => {
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
             this.api.openSnackBar(error, 'X', 'error');
           }
         );

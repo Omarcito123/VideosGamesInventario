@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { NgxSpinnerService } from "ngx-spinner"; 
+import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from 'src/app/services/auth.service';
 import { ApiService } from 'src/app/services/api.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,45 +25,46 @@ export class ComisionesComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private api: ApiService, private SpinnerService: NgxSpinnerService, public dialog: MatDialog, private authService: AuthService) { }
+  constructor(private api: ApiService, private SpinnerService: NgxSpinnerService,
+              public dialog: MatDialog, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.getComisionesList();
   }
 
-  applyFilter(event: Event){
+  applyFilter(event: Event): void{
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  getComisionesList(){
-    this.SpinnerService.show(); 
-      this.api.getComisionesList().subscribe(
+  getComisionesList(): void{
+    this.SpinnerService.show();
+    this.api.getComisionesList().subscribe(
         (response) => {
           if (response != null) {
-            if (response.state == "Success") {
-              this.comisionesList = response.data;   
+            if (response.state === 'Success') {
+              this.comisionesList = response.data;
               this.dataSource = new MatTableDataSource(this.comisionesList);
               this.dataSource.paginator = this.paginator;
-              this.dataSource.sort = this.sort;                      
+              this.dataSource.sort = this.sort;
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
           }
-          this.SpinnerService.hide(); 
+          this.SpinnerService.hide();
         },
         (error) => {
-          this.SpinnerService.hide(); 
-          if(error.includes("403")){
+          this.SpinnerService.hide();
+          if (error.includes('403')){
             this.authService.logout();
           }
         }
       );
   }
 
-  addComision(): void {    
+  addComision(): void {
     const dialogRef = this.dialog.open(AddEditComisionComponent, {
       data: null
     });
@@ -74,7 +75,7 @@ export class ComisionesComponent implements OnInit {
     });
   }
 
-  editComision(comisionEdit: any){
+  editComision(comisionEdit: any): void{
     const dialogRef = this.dialog.open(AddEditComisionComponent, {
       data: comisionEdit
     });
@@ -85,7 +86,7 @@ export class ComisionesComponent implements OnInit {
     });
   }
 
-  deleteComision(comisionId: any){
+  deleteComision(comisionId: any): void{
     const dialogRef = this.dialog.open(DialogConfirmacionComponent, {
       width: '350px',
       data: {mensaje: 'Esta seguro que desea eliminar al usuario?'}
@@ -93,11 +94,11 @@ export class ComisionesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'aceptar') {
-        this.SpinnerService.show();   
+        this.SpinnerService.show();
         this.api.deleteComisionById(comisionId).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == "Success") {
+              if (response.state === 'Success') {
                 this.getComisionesList();
                 this.api.openSnackBar('La comision fue eliminada con exito!', 'X', 'success');
               } else {
@@ -106,10 +107,10 @@ export class ComisionesComponent implements OnInit {
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
           },
           (error) => {
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
             this.api.openSnackBar(error, 'X', 'error');
           }
         );

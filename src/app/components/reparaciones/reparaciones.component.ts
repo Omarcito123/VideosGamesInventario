@@ -82,10 +82,10 @@ export class ReparacionesComponent implements OnInit {
     this.rol = this.userSesion.rolname;
     this.getReparacionesInvList();
     this.getComprobanteList();
-    this.getUserList();    
+    this.getUserList();
   }
 
-  getComprobanteList() {
+  getComprobanteList(): void {
     this.comprobantesList = [
       { value: 1, description: 'Factura' },
       { value: 2, description: 'Sin Recibo' },
@@ -93,18 +93,18 @@ export class ReparacionesComponent implements OnInit {
     ];
   }
 
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  getReparacionesInvList() {
+  getReparacionesInvList(): void {
     this.SpinnerService.show();
-    var reparacion = new reparacionEnc();
+    const reparacion = new reparacionEnc();
     this.api.getReparacionesInvList(reparacion).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.reparacionesList = response.data;
             this.dataSource = new MatTableDataSource(this.reparacionesList);
             this.dataSource.paginator = this.paginator;
@@ -137,7 +137,7 @@ export class ReparacionesComponent implements OnInit {
     });
   }
 
-  editReparacion(reparacionEdit: any) {
+  editReparacion(reparacionEdit: any): void {
     const dialogRef = this.dialog.open(AddEditReparacionComponent, {
       data: reparacionEdit,
     });
@@ -148,14 +148,14 @@ export class ReparacionesComponent implements OnInit {
     });
   }
 
-  addRepuestos(reparacionEdit: any) {
+  addRepuestos(reparacionEdit: any): void {
     this.isDetalle = true;
     this.repEncabezado = reparacionEdit;
     this.numberRecibo = this.repEncabezado.recibo;
     this.getReparacionDetallesInvList();
   }
 
-  deleteReparacion(reparacionDe: any) {
+  deleteReparacion(reparacionDe: any): void {
     const dialogRef = this.dialog.open(DialogConfirmacionComponent, {
       width: '350px',
       data: { mensaje: 'Esta seguro que desea eliminar al usuario?' },
@@ -167,7 +167,7 @@ export class ReparacionesComponent implements OnInit {
         this.api.logicDeleteReparacion(reparacionDe).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == 'Success') {
+              if (response.state === 'Success') {
                 this.getReparacionesInvList();
                 this.api.openSnackBar(
                   'El registro fue eliminado con exito!',
@@ -192,14 +192,14 @@ export class ReparacionesComponent implements OnInit {
   }
 
   /* Detalles de las reparaciones */
-  getReparacionDetallesInvList() {
+  getReparacionDetallesInvList(): void {
     this.SpinnerService.show();
-    var repDet = new reparacionDet();
+    const repDet = new reparacionDet();
     repDet.idreparacionenc = this.repEncabezado.idreparacionenc;
     this.api.getReparacionDetallesInvList(repDet).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.reparacionDetList = response.data;
             this.dataSource2 = new MatTableDataSource(this.reparacionDetList);
             this.dataSource2.paginator = this.paginator;
@@ -221,7 +221,7 @@ export class ReparacionesComponent implements OnInit {
     );
   }
 
-  addDetalle() {
+  addDetalle(): void {
     const dialogRef = this.dialog.open(AddEditDetalleRepComponent, {
       data: this.repEncabezado,
     });
@@ -232,7 +232,7 @@ export class ReparacionesComponent implements OnInit {
     });
   }
 
-  editDetalle(detalleEdit: any) {
+  editDetalle(detalleEdit: any): void {
     const dialogRef = this.dialog.open(AddEditDetalleRepComponent, {
       data: detalleEdit,
     });
@@ -243,16 +243,16 @@ export class ReparacionesComponent implements OnInit {
     });
   }
 
-  goBackRepEnc() {
+  goBackRepEnc(): void {
     this.isDetalle = false;
   }
 
-  getUserList() {
+  getUserList(): void {
     this.SpinnerService.show();
     this.api.getUsersBodegaList().subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.usersList = response.data;
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
@@ -271,14 +271,14 @@ export class ReparacionesComponent implements OnInit {
     );
   }
 
-  entregarRep() {
+  entregarRep(): void {
     this.ventaList = [];
     if (this.payProductCarForm.valid) {
-      if (this.selectedComprobante == 'Factura') {
+      if (this.selectedComprobante === 'Factura') {
         if (
           this.numberFactura == null ||
-          this.numberFactura == undefined ||
-          this.numberFactura == ''
+          this.numberFactura === undefined ||
+          this.numberFactura === ''
         ) {
           this.api.openSnackBar(
             'Ingrese el numero de la factura',
@@ -288,11 +288,11 @@ export class ReparacionesComponent implements OnInit {
           return;
         }
       }
-      if (this.selectedComprobante == 'Recibo') {
+      if (this.selectedComprobante === 'Recibo') {
         if (
-          this.numberRecibo == null ||
-          this.numberRecibo == undefined ||
-          this.numberRecibo == ''
+          this.numberRecibo === null ||
+          this.numberRecibo === undefined ||
+          this.numberRecibo === ''
         ) {
           this.api.openSnackBar(
             'Ingrese el numero del recibo',
@@ -303,9 +303,9 @@ export class ReparacionesComponent implements OnInit {
         }
       }
       this.SpinnerService.show();
-      var iduseradd = this.selectedVendedor;
+      const iduseradd = this.selectedVendedor;
       this.reparacionDetList.forEach((ventaObj) => {
-        var ventaCar = new venta();
+        const ventaCar = new venta();
         ventaCar.tipopago = 'Efectivo';
         ventaCar.tipoventa = 'Reparacion';
         ventaCar.post = '';
@@ -325,7 +325,7 @@ export class ReparacionesComponent implements OnInit {
       this.api.createVenta(this.ventaList).subscribe(
         (response) => {
           if (response != null) {
-            if (response.state == 'Success') {
+            if (response.state === 'Success') {
               this.bajaReparacionPorEntrega();
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
@@ -352,12 +352,12 @@ export class ReparacionesComponent implements OnInit {
     }
   }
 
-  bajaReparacionPorEntrega() {
+  bajaReparacionPorEntrega(): void {
     this.repEncabezado.estado = false;
     this.api.updateReparaionInv(this.repEncabezado).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             location.reload();
             this.api.openSnackBar(
               'Reparacion finalizada exitosamente',
@@ -381,7 +381,7 @@ export class ReparacionesComponent implements OnInit {
     );
   }
 
-  deleteReparacionDet(reparacionDe: any) {
+  deleteReparacionDet(reparacionDe: any): void {
     const dialogRef = this.dialog.open(DialogConfirmacionComponent, {
       width: '350px',
       data: { mensaje: 'Esta seguro que desea eliminar el repuesto?' },
@@ -393,7 +393,7 @@ export class ReparacionesComponent implements OnInit {
         this.api.deleteReparacionDet(reparacionDe).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == 'Success') {
+              if (response.state === 'Success') {
                 this.getReparacionDetallesInvList();
                 this.api.openSnackBar(
                   'El registro fue eliminado con exito!',

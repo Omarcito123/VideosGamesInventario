@@ -10,7 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { producto } from '../../models/producto';
 import { sucursales } from 'src/app/models/sucursales';
 import { Observable } from 'rxjs';
-import { map, startWith, window } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { productoCar } from 'src/app/models/productoCar';
 import { userInv } from '../../models/userInv';
@@ -34,7 +34,7 @@ interface Valores {
 })
 export class VentasComponent implements OnInit {
 
-  cuponUsado = new cupones()
+  cuponUsado = new cupones();
   selectedTipoPago: string;
   tipoPagoVenta: string;
   selectedPost: string;
@@ -151,17 +151,17 @@ export class VentasComponent implements OnInit {
     this.getTipoVentaList();
   }
 
-  cancelarCupon() {
+  cancelarCupon(): void {
     this.cuponActive = false;
   }
 
-  saveFantanteSobrante() {
+  saveFantanteSobrante(): void {
     this.caja.idsucursal = this.userSesion.idsucursal;
     this.SpinnerService.show();
     this.api.saveFantanteSobrante(this.caja).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.api.openSnackBar(response.message, 'X', 'success');
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
@@ -180,9 +180,9 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  saveInicioCajaMonedas() {
-    if(this.rol != 'SuperAdmin' && this.rol != 'Administrador'){
-      this.api.openSnackBar("No tienes los permisos para realizar esta accion", 'X', 'error');
+  saveInicioCajaMonedas(): void {
+    if (this.rol !== 'SuperAdmin' && this.rol !== 'Administrador'){
+      this.api.openSnackBar('No tienes los permisos para realizar esta accion', 'X', 'error');
       return;
     }
     this.caja.idsucursal = this.userSesion.idsucursal;
@@ -190,7 +190,7 @@ export class VentasComponent implements OnInit {
     this.api.saveInicioCajaMonedas(this.caja).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             location.reload();
             this.api.openSnackBar(response.message, 'X', 'success');
           } else {
@@ -210,13 +210,13 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  saveMonedas(){
+  saveMonedas(): void{
     this.caja.idsucursal = this.userSesion.idsucursal;
     this.SpinnerService.show();
     this.api.saveMonedas(this.caja).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             location.reload();
             this.api.openSnackBar(response.message, 'X', 'success');
           } else {
@@ -236,7 +236,7 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  getTipoVentaList() {
+  getTipoVentaList(): void {
     this.tipoVentaList = [
       { value: 'Venta', viewValue: 'Venta' },
       { value: 'Reserva', viewValue: 'Reserva' },
@@ -244,7 +244,7 @@ export class VentasComponent implements OnInit {
     ];
   }
 
-  getTipoPagoList() {
+  getTipoPagoList(): void {
     this.tipoPagoList = [
       { value: 1, description: 'Tarjeta' },
       { value: 2, description: 'Efectivo' },
@@ -253,7 +253,7 @@ export class VentasComponent implements OnInit {
     ];
   }
 
-  getPostList() {
+  getPostList(): void {
     this.tipoPostList = [
       { value: 1, description: 'Agricola' },
       { value: 2, description: 'Credomatic' },
@@ -262,7 +262,7 @@ export class VentasComponent implements OnInit {
     ];
   }
 
-  getComprobanteList() {
+  getComprobanteList(): void {
     this.comprobantesList = [
       { value: 1, description: 'Factura' },
       { value: 2, description: 'Sin Recibo' },
@@ -270,42 +270,42 @@ export class VentasComponent implements OnInit {
     ];
   }
 
-  activeCuponDiv() {
+  activeCuponDiv(): void {
     this.cuponActive = true;
   }
 
-  getDescuentoCupon() {
+  getDescuentoCupon(): void {
     this.SpinnerService.show();
     this.cuponFind.cupon = this.codigoCupon;
-    var categorias = '';
-    this.productAddCarList.forEach(function (value) {
-      if (value.nombre != 'totalAllProduct') {
+    let categorias = '';
+    this.productAddCarList.forEach((value, index) => {
+      if (value.nombre !== 'totalAllProduct') {
         categorias += value.categoria + ',';
       }
     });
     this.cuponFind.categoria = categorias;
-    var myDate = new Date();
+    const myDate = new Date();
     this.cuponFind.fechavalido = this.datePipe.transform(
       myDate,
       'yyyy/MM/dd hh:mm:ss'
     );
-    
+
     this.api.findCuponByCodigoAndDate(this.cuponFind).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {            
+          if (response.state === 'Success') {
             this.cuponUsado = response.data;
-            console.log("cupon correcto");
-            this.productAddCarList.forEach(function (value) {
-              if (value.categoria == response.data.categoria || response.data.categoria == 'TODAS') {
+            console.log('cupon correcto');
+            this.productAddCarList.forEach((value, index) => {
+              if (value.categoria === response.data.categoria || response.data.categoria === 'TODAS') {
                 value.descuento = response.data.descuento * value.cantidad;
               }
             });
             const descuentoTotal = this.productAddCarList
-              .filter((item) => item.nombre != 'totalAllProduct')
+              .filter((item) => item.nombre !== 'totalAllProduct')
               .reduce((sum, current) => sum + current.descuento, 0);
-            var itemTotales = this.productAddCarList
-              .filter((item) => item.nombre == 'totalAllProduct')
+            const itemTotales = this.productAddCarList
+              .filter((item) => item.nombre === 'totalAllProduct')
               .find((i) => i);
             itemTotales.descuento = descuentoTotal;
             this.totalCompra = itemTotales.precioTotal - descuentoTotal;
@@ -328,13 +328,13 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  findCajaByDateAndSucursal() {
+  findCajaByDateAndSucursal(): void {
     this.SpinnerService.show();
     this.caja.idsucursal = this.userSesion.idsucursal;
     this.api.findCajaByDateAndSucursal(this.caja).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.caja = response.data;
             this.caja.monedas = this.caja.monedas;
           } else {
@@ -354,15 +354,15 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  getVentasBySucursal() {
+  getVentasBySucursal(): void {
     this.SpinnerService.show();
     this.ventasVen.idsucursal = this.userSesion.idsucursal;
-    var myDate = new Date();
+    const myDate = new Date();
     this.ventasVen.dateadd = this.datePipe.transform(myDate, 'yyyy/MM/dd');
     this.api.getVentasBySucursal(this.ventasVen).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.ventasBySucursalList = response.data;
             this.montoTotalVentas();
             this.getComprasBySucursal();
@@ -384,21 +384,21 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  montoTotalVentas() {
+  montoTotalVentas(): void {
     this.totalVentas = this.ventasBySucursalList
       .filter((item) => item.preciototal != null)
       .reduce((sum, current) => sum + current.preciototal, 0);
 
     this.totalVentasTarjetas = this.ventasBySucursalList
-      .filter((item) => item.preciototal != null && item.tipopago == 'Tarjeta')
+      .filter((item) => item.preciototal != null && item.tipopago === 'Tarjeta')
       .reduce((sum, current) => sum + current.preciototal, 0);
 
     this.totalAgricola = this.ventasBySucursalList
       .filter(
         (item) =>
           item.preciototal != null &&
-          item.tipopago == 'Tarjeta' &&
-          item.post == 'Agricola'
+          item.tipopago === 'Tarjeta' &&
+          item.post === 'Agricola'
       )
       .reduce((sum, current) => sum + current.preciototal, 0);
 
@@ -406,8 +406,8 @@ export class VentasComponent implements OnInit {
       .filter(
         (item) =>
           item.preciototal != null &&
-          item.tipopago == 'Tarjeta' &&
-          item.post == 'Cuscatlan'
+          item.tipopago === 'Tarjeta' &&
+          item.post === 'Cuscatlan'
       )
       .reduce((sum, current) => sum + current.preciototal, 0);
 
@@ -415,8 +415,8 @@ export class VentasComponent implements OnInit {
       .filter(
         (item) =>
           item.preciototal != null &&
-          item.tipopago == 'Tarjeta' &&
-          item.post == 'Davivienda'
+          item.tipopago === 'Tarjeta' &&
+          item.post === 'Davivienda'
       )
       .reduce((sum, current) => sum + current.preciototal, 0);
 
@@ -424,23 +424,23 @@ export class VentasComponent implements OnInit {
       .filter(
         (item) =>
           item.preciototal != null &&
-          item.tipopago == 'Tarjeta' &&
-          item.post == 'Credomatic'
+          item.tipopago === 'Tarjeta' &&
+          item.post === 'Credomatic'
       )
       .reduce((sum, current) => sum + current.preciototal, 0);
 
     this.totalEfectivoEntregar = this.ventasBySucursalList
-      .filter((item) => item.preciototal != null && item.tipopago == 'Efectivo')
+      .filter((item) => item.preciototal != null && item.tipopago === 'Efectivo')
       .reduce((sum, current) => sum + current.preciototal, 0);
 
     this.totalEfectivo = this.ventasBySucursalList
-      .filter((item) => item.preciototal != null && item.tipopago == 'Efectivo')
+      .filter((item) => item.preciototal != null && item.tipopago === 'Efectivo')
       .reduce((sum, current) => sum + current.preciototal, 0);
 
     this.totalQR = this.ventasBySucursalList
       .filter(
         (item) =>
-          item.preciototal != null && item.tipopago == 'QR o Transferencias'
+          item.preciototal != null && item.tipopago === 'QR o Transferencias'
       )
       .reduce((sum, current) => sum + current.preciototal, 0);
 
@@ -448,25 +448,25 @@ export class VentasComponent implements OnInit {
       .filter(
         (item) =>
           item.preciototal != null &&
-          item.tipopago == 'Pago en linea retira en sucursal'
+          item.tipopago === 'Pago en linea retira en sucursal'
       )
       .reduce((sum, current) => sum + current.preciototal, 0);
 
     this.totalReserva = this.ventasBySucursalList
-      .filter((item) => item.preciototal != null && item.tipoventa == 'Reserva')
+      .filter((item) => item.preciototal != null && item.tipoventa === 'Reserva')
       .reduce((sum, current) => sum + current.preciototal, 0);
 
     this.ventaTotalSucursal = this.totalVentas - this.totalPagoOnLine;
   }
 
-  getComprasBySucursal() {
+  getComprasBySucursal(): void {
     this.SpinnerService.show();
-    var compraId = new compra();
+    const compraId = new compra();
     compraId.idsucursal = this.userSesion.idsucursal;
     this.api.getListComprasBySucursal(compraId).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.comprasBySucursalList = response.data;
             this.montoTotalCompras();
           } else {
@@ -486,7 +486,7 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  montoTotalCompras() {
+  montoTotalCompras(): void {
     this.totalComprasSucursal = this.comprasBySucursalList
       .filter((item) => item.total != null)
       .reduce((sum, current) => sum + current.total, 0);
@@ -494,12 +494,12 @@ export class VentasComponent implements OnInit {
       this.totalEfectivoEntregar - this.totalComprasSucursal;
   }
 
-  getSucursales() {
+  getSucursales(): void {
     this.SpinnerService.show();
     this.api.getSucursales().subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.sucursalesList = response.data;
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
@@ -518,14 +518,14 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  getProductsBySucursal() {
+  getProductsBySucursal(): void {
     this.SpinnerService.show();
     this.product = new producto();
     this.product.idsucursal = this.selectedSucursal;
     this.api.getProductsBySucursal(this.product).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.productBySucursalList = response.data;
             this.options = response.data.map((a) => a.nombre);
             this.filteredOptions = this.myControl.valueChanges.pipe(
@@ -554,12 +554,12 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  getUserList() {
+  getUserList(): void {
     this.SpinnerService.show();
     this.api.getUsersListBySucursal(this.userSesion.idsucursal).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.usersList = response.data;
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
@@ -578,21 +578,21 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  deleteProductSerie() {
+  deleteProductSerie(): void {
     if (this.productSell != null) {
       this.productSell.serie = '';
     }
   }
 
-  fillDataProduct() {
+  fillDataProduct(): void {
     this.deleteProductSerie();
-    this.tipoPagoVenta = '';    
+    this.tipoPagoVenta = '';
 
     Object.keys(this.addProductCarForm.controls).forEach((key) => {
       this.addProductCarForm.get(key).setErrors(null);
     });
 
-    if(this.productSell.nombre === undefined || this.productSell.nombre === ''){
+    if (this.productSell.nombre === undefined || this.productSell.nombre === ''){
       return;
     }
 
@@ -602,9 +602,9 @@ export class VentasComponent implements OnInit {
     this.api.findProductByNameAndSucursalAndCode(this.productSell).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             if (response.data != null) {
-              this.productSell = response.data;              
+              this.productSell = response.data;
               if (response.data.existencia > 0) {
                 response.data.cantidad = 1;
                 this.tipoPagoVenta = 'Efectivo';
@@ -627,15 +627,15 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  fillDataProductSerie(){
+  fillDataProductSerie(): void{
     this.deleteProductName();
-    this.tipoPagoVenta = '';    
+    this.tipoPagoVenta = '';
 
     Object.keys(this.addProductCarForm.controls).forEach((key) => {
       this.addProductCarForm.get(key).setErrors(null);
     });
 
-    if(this.productSell.serie === undefined || this.productSell.serie === ''){
+    if (this.productSell.serie === undefined || this.productSell.serie === ''){
       return;
     }
 
@@ -646,9 +646,9 @@ export class VentasComponent implements OnInit {
       (response) => {
         console.log(response);
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             if (response.data != null) {
-              this.productSell = response.data;              
+              this.productSell = response.data;
               if (response.data.existencia > 0) {
                 response.data.cantidad = 1;
                 this.tipoPagoVenta = 'Efectivo';
@@ -671,14 +671,14 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  deleteProductName() {
+  deleteProductName(): void {
     if (this.productSell != null) {
       this.productSell.nombre = '';
     }
   }
 
-  fillDataProduct2() {
-    this.tipoPagoVenta = '';    
+  fillDataProduct2(): void {
+    this.tipoPagoVenta = '';
 
     Object.keys(this.addProductCarForm.controls).forEach((key) => {
       this.addProductCarForm.get(key).setErrors(null);
@@ -690,9 +690,9 @@ export class VentasComponent implements OnInit {
     this.api.findProductByNameAndSucursalAndCode(this.productSell).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             if (response.data != null) {
-              this.productSell = response.data;              
+              this.productSell = response.data;
               if (response.data.existencia > 0) {
                 response.data.cantidad = 1;
                 this.tipoPagoVenta = 'Efectivo';
@@ -715,7 +715,7 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  calcularTotalProd() {
+  calcularTotalProd(): void {
     if (!this.esOferta) {
       this.productSell.precioTotal =
         this.productSell.cantidad * this.productSell.precioregular;
@@ -725,20 +725,20 @@ export class VentasComponent implements OnInit {
     }
   }
 
-  agregarProducto() {
+  agregarProducto(): void {
     if (this.addProductCarForm.valid) {
       if (this.productSell.nombre == null) {
         this.api.openSnackBar('Nombre del producto incorrecto', 'X', 'error');
-      } else if (this.productSell.nombre == undefined) {
+      } else if (this.productSell.nombre === undefined) {
         this.api.openSnackBar('Nombre del producto incorrecto', 'X', 'error');
-      } else if (this.productSell.nombre == '') {
+      } else if (this.productSell.nombre === '') {
         this.api.openSnackBar('Nombre del producto incorrecto', 'X', 'error');
       } else if (
         this.productSell.cantidad == null ||
-        this.productSell.cantidad == undefined
+        this.productSell.cantidad === undefined
       ) {
         this.api.openSnackBar('Ingresa los campos requeridos', 'X', 'error');
-      } else if (this.productSell.cantidad == 0) {
+      } else if (this.productSell.cantidad === 0) {
         this.api.openSnackBar(
           'Ingresa la cantidad de producto a vender',
           'X',
@@ -753,7 +753,7 @@ export class VentasComponent implements OnInit {
         );
         return;
       } else {
-        var productAddCar = new productoCar(
+        const productAddCar = new productoCar(
           this.productSell.idprodinv,
           this.productSell.categoria,
           this.productSell.dateadd,
@@ -773,7 +773,7 @@ export class VentasComponent implements OnInit {
           0
         );
         this.productAddCarList.push(productAddCar);
-        var indexTotal = this.findTotalAllProduct('totalAllProduct');
+        const indexTotal = this.findTotalAllProduct('totalAllProduct');
         this.addItemTotalProducts(indexTotal);
         this.dataSource = new MatTableDataSource(this.productAddCarList);
         this.dataSource.paginator = this.paginator;
@@ -793,12 +793,12 @@ export class VentasComponent implements OnInit {
     }
   }
 
-  deleteProductCar(item: any) {
+  deleteProductCar(item: any): void {
     const index = this.productAddCarList.findIndex(
       (i) => i.idprodinv === item.idprodinv
     );
     this.productAddCarList.splice(index, 1);
-    var indexTotal = this.findTotalAllProduct('totalAllProduct');
+    const indexTotal = this.findTotalAllProduct('totalAllProduct');
     this.addItemTotalProducts(indexTotal);
     this.dataSource = new MatTableDataSource(this.productAddCarList);
     this.dataSource.paginator = this.paginator;
@@ -811,18 +811,18 @@ export class VentasComponent implements OnInit {
     return this.productAddCarList.findIndex((i) => i.nombre === name);
   }
 
-  addItemTotalProducts(index: any) {
-    if (index != -1) {
+  addItemTotalProducts(index: any): void {
+    if (index !== -1) {
       this.productAddCarList.splice(index, 1);
     }
     const sum = this.productAddCarList
-      .filter((item) => item.nombre != 'totalAllProduct')
-      .reduce((sum, current) => sum + current.precioTotal, 0);
+      .filter((item) => item.nombre !== 'totalAllProduct')
+      .reduce((suma, current) => suma + current.precioTotal, 0);
     const sumDes = this.productAddCarList
-      .filter((item) => item.nombre != 'totalAllProduct')
-      .reduce((sum, current) => sum + current.descuento, 0);
+      .filter((item) => item.nombre !== 'totalAllProduct')
+      .reduce((suma, current) => suma + current.descuento, 0);
     this.totalCompra = sum - sumDes;
-    var itemTotal = new productoCar(
+    const itemTotal = new productoCar(
       0,
       '',
       '',
@@ -858,7 +858,7 @@ export class VentasComponent implements OnInit {
     }
   }
 
-  clearProduct() {
+  clearProduct(): void {
     this.productSell.idprodinv = null;
     this.productSell.categoria = '';
     this.productSell.dateadd = '';
@@ -877,14 +877,14 @@ export class VentasComponent implements OnInit {
     this.productSell.precioTotal = null;
   }
 
-  realizarVenta() {
+  realizarVenta(): void {
     this.noInProgres = false;
     if (this.payProductCarForm.valid) {
-      if (this.selectedTipoPago == 'Tarjeta') {
+      if (this.selectedTipoPago === 'Tarjeta') {
         if (
           this.namePost == null ||
-          this.namePost == undefined ||
-          this.namePost == ''
+          this.namePost === undefined ||
+          this.namePost === ''
         ) {
           this.api.openSnackBar('Seleccione el post', 'X', 'error');
           this.noInProgres = true;
@@ -892,12 +892,12 @@ export class VentasComponent implements OnInit {
         }
       }
       if (
-        this.selectedComprobante == 'Factura'
+        this.selectedComprobante === 'Factura'
       ) {
         if (
           this.numberFactura == null ||
-          this.numberFactura == undefined ||
-          this.numberFactura == ''
+          this.numberFactura === undefined ||
+          this.numberFactura === ''
         ) {
           this.api.openSnackBar(
             'Ingrese el numero de la factura',
@@ -909,12 +909,12 @@ export class VentasComponent implements OnInit {
         }
       }
       if (
-        this.selectedComprobante == 'Recibo'
+        this.selectedComprobante === 'Recibo'
       ) {
         if (
           this.numberRecibo == null ||
-          this.numberRecibo == undefined ||
-          this.numberRecibo == ''
+          this.numberRecibo === undefined ||
+          this.numberRecibo === ''
         ) {
           this.api.openSnackBar(
             'Ingrese el numero del recibo',
@@ -926,28 +926,28 @@ export class VentasComponent implements OnInit {
         }
       }
       if (
-        this.selectedComprobante == 'Factura'
+        this.selectedComprobante === 'Factura'
       ) {
-        this.numberRecibo = "";
+        this.numberRecibo = '';
       }
       if (
-        this.selectedComprobante == 'Recibo'
+        this.selectedComprobante === 'Recibo'
       ) {
-        this.numberFactura = "";
+        this.numberFactura = '';
       }
       if (
-        this.selectedComprobante == 'Sin Recibo'
+        this.selectedComprobante === 'Sin Recibo'
       ) {
-        this.numberFactura = "";
-        this.numberRecibo = "";
+        this.numberFactura = '';
+        this.numberRecibo = '';
       }
-      
+
       this.SpinnerService.show();
       this.ventaList = [];
       this.productSell.idsucursal = this.userSesion.idsucursal;
-      var iduseradd = this.selectedVendedor;
+      const iduseradd = this.selectedVendedor;
       this.productAddCarList.forEach((ventaObj) => {
-        if (ventaObj.nombre != 'totalAllProduct') {
+        if (ventaObj.nombre !== 'totalAllProduct') {
           this.ventaCar = new venta();
           this.ventaCar.tipopago = this.selectedTipoPago;
           this.ventaCar.tipoventa = this.selectedtipoVenta;
@@ -974,12 +974,12 @@ export class VentasComponent implements OnInit {
         (response) => {
           this.esperando = 'No';
           if (response != null) {
-            if (response.state == 'Success') {
+            if (response.state === 'Success') {
               this.caja.idsucursal = this.userSesion.idsucursal;
-              //this.calcularCierreCaja(this.caja);
+              // this.calcularCierreCaja(this.caja);
               this.modifyCupon();
               location.reload();
-              //window.location.reload();
+              // window.location.reload();
               this.api.openSnackBar(
                 'Venta realizada exitosamente',
                 'X',
@@ -1020,16 +1020,16 @@ export class VentasComponent implements OnInit {
     }
   }
 
-  modifyCupon(){
-    if(this.pagoConCupon){
+  modifyCupon(): void{
+    if (this.pagoConCupon){
       this.cuponUsado.numerouso = this.cuponUsado.numerouso + 1;
       this.SpinnerService.show();
-    this.api.modifyCupon(this.cuponUsado).subscribe(
+      this.api.modifyCupon(this.cuponUsado).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             location.reload();
-            //window.location.reload();
+            // window.location.reload();
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
           }
@@ -1048,14 +1048,14 @@ export class VentasComponent implements OnInit {
     }
   }
 
-  calcularCierreCaja(caja: cajaInv) {
+  calcularCierreCaja(caja: cajaInv): void {
     this.SpinnerService.show();
     this.api.calcularCierreCaja(caja).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             location.reload();
-            //window.location.reload();
+            // window.location.reload();
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
           }
@@ -1073,17 +1073,17 @@ export class VentasComponent implements OnInit {
     );
   }
 
-  getPrecioByTipoPago(event) {
-    if (event == 'Tarjeta') {
+  getPrecioByTipoPago(event): void {
+    if (event === 'Tarjeta') {
       this.esOferta = false;
     } else if (
       event != null &&
-      event != undefined &&
-      event != '' &&
-      event != 'Tarjeta'
+      event !== undefined &&
+      event !== '' &&
+      event !== 'Tarjeta'
     ) {
       this.esOferta = true;
     }
-    this.calcularTotalProd();    
+    this.calcularTotalProd();
   }
 }

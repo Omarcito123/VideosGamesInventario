@@ -22,6 +22,7 @@
                         "polyfills": "src/polyfills.ts",
                         "tsConfig": "tsconfig.app.json",
                         "aot": true,
+                        "allowedCommonJsDependencies": ["xlsx", "jquery"],
                         "assets": [
                             "src/favicon.ico",
                             "src/assets"
