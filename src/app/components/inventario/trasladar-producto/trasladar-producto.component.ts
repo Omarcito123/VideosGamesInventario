@@ -22,6 +22,7 @@ export class TrasladarProductoComponent implements OnInit {
   cantidad = 0;
   trasladados = 0;
   bandera = 0;
+  menosTodas = 0;
   allSelected = false;
   sucurslesId = [];
 
@@ -75,6 +76,9 @@ export class TrasladarProductoComponent implements OnInit {
       this.trasladados = 0;
       this.SpinnerService.show();
       this.selectedSucursal.forEach(async idSucur => {
+        if(idSucur === 0){
+          this.menosTodas = 1;
+        }
         if (idSucur !== 0){
           this.productTras.idsucursal = idSucur;
           this.productTras.existencia = this.cantidad;
@@ -85,7 +89,7 @@ export class TrasladarProductoComponent implements OnInit {
                 if (response.state === 'Success') {
                   this.sucursalesList = response.data;
                   this.trasladados = this.trasladados + 1;
-                  if (this.selectedSucursal.length === this.bandera){
+                  if ((this.selectedSucursal.length - this.menosTodas) === this.bandera){
                     this.updateExistenciaBodega();
                   }
                   this.api.openSnackBar(response.message, 'X', 'success');

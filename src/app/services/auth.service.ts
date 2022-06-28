@@ -32,7 +32,7 @@ export class AuthService {
 
     setJwt(userSesion: user): void {
         localStorage.setItem('currentUser', JSON.stringify(userSesion));
-        localStorage.setItem('token', userSesion.token.toString());
+        localStorage.setItem('token', userSesion.token.toString().replace('Bearer ', '').replace(' ', ''));
         this.currentUserSubject.next(userSesion);
     }
 

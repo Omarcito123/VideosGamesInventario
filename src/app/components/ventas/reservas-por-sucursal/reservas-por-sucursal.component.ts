@@ -66,9 +66,6 @@ export class ReservasPorSucursalComponent implements OnInit {
         },
         (error) => {
           this.SpinnerService.hide();
-          if (error.includes('403')){
-            this.authService.logout();
-          }
         }
       );
   }
@@ -97,9 +94,6 @@ export class ReservasPorSucursalComponent implements OnInit {
         },
         (error) => {
           this.SpinnerService.hide();
-          if (error.includes('403')){
-            this.authService.logout();
-          }
         }
       );
   }
@@ -126,9 +120,6 @@ export class ReservasPorSucursalComponent implements OnInit {
         },
         (error) => {
           this.SpinnerService.hide();
-          if (error.includes('403')){
-            this.authService.logout();
-          }
         }
       );
   }

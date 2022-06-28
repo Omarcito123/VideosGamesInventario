@@ -25,6 +25,8 @@ export class VerPedidoSucursalComponent implements OnInit {
   selectedSucursal: number;
   sucursalesList: sucursales[];
   productTras = new producto();
+  entregas: number;
+  entregasRequest = 0;
 
   displayedColumns: string[] = [
     'seleccionar',
@@ -122,11 +124,18 @@ export class VerPedidoSucursalComponent implements OnInit {
     }
   }
 
-  entregarProductos(): void{
+  entregarProductos(): void {
+    this.entregasRequest = 0;
+    this.entregas = this.pedidosTrasladarList.length;
     this.pedidosTrasladarList.forEach((value, index) => {
-      if (value.cantidad > value.existenciabodega){
-        this.api.openSnackBar('La cantidad ingresa es mayor a la existencia del producto: ' + value.nombreproducto, 'X', 'error');
-      }else{
+      if (value.cantidad > value.existenciabodega) {
+        this.api.openSnackBar(
+          'La cantidad ingresa es mayor a la existencia del producto: ' +
+            value.nombreproducto,
+          'X',
+          'error'
+        );
+      } else {
         this.trasladarProducto(value);
       }
     });
@@ -139,50 +148,75 @@ export class VerPedidoSucursalComponent implements OnInit {
     this.productTras.idsucursal = this.selectedSucursal;
     this.productTras.existencia = pedido.cantidad;
     this.productTras.nombre = pedido.nombreproducto;
+    this.productTras.serie = pedido.serie;
     this.productTras.idprodinv = pedido.idprodinv;
     this.productTras.iduseradd = this.userSesion.iduser;
-    const response = await this.api.trasladarProducto(this.productTras).toPromise();
-    if (response) {
-      if (response != null) {
-        if (response.state === 'Success') {
-          this.api.openSnackBar('Producto ' + pedido.nombreproducto + ' entregado exitosamente', 'X', 'success');
-          this.updatePedidoInv(pedido);
+
+    this.api.trasladarProducto(this.productTras).subscribe(
+      (response) => {
+        this.entregasRequest = this.entregasRequest + 1;
+        if (response) {
+          if (response != null) {
+            if (response.state === 'Success') {
+              this.api.openSnackBar(
+                'Producto ' + pedido.nombreproducto + ' entregado exitosamente',
+                'X',
+                'success'
+              );
+              this.updatePedidoInv(pedido);
+            } else {
+              this.api.openSnackBar(response.message, 'X', 'error');
+            }
+          } else {
+            this.api.openSnackBar(response.message, 'X', 'error');
+          }
+          this.SpinnerService.hide();
         } else {
-          this.api.openSnackBar(response.message, 'X', 'error');
+          this.SpinnerService.hide();
         }
-      } else {
-        this.api.openSnackBar(response.message, 'X', 'error');
+      },
+      (error) => {
+        this.SpinnerService.hide();
+        if (error.includes('403')) {
+          this.authService.logout();
+        }
       }
-      this.SpinnerService.hide();
-    } else {
-      this.SpinnerService.hide();
-    }
+    );
   }
 
-  updatePedidoInv(pedido: pedidoInv): void{
+  updatePedidoInv(pedido: pedidoInv): void {
     const myDate = new Date();
     pedido.fechaentrega = this.datePipe.transform(myDate, 'yyyy/MM/dd');
     pedido.estado = 'entregado';
     this.SpinnerService.show();
     this.api.updatePedidoInv(pedido).subscribe(
-          (response) => {
-            if (response != null) {
-              if (response.state === 'Success') {
-                this.getPedidosListBySucursal();
-              } else {
-                this.api.openSnackBar(response.message, 'X', 'error');
-              }
-            } else {
-              this.api.openSnackBar(response.message, 'X', 'error');
-            }
-            this.SpinnerService.hide();
-          },
-          (error) => {
-            this.SpinnerService.hide();
-            if (error.includes('403')){
-              this.authService.logout();
-            }
+      (response) => {
+        if (response != null) {
+          if (response.state === 'Success') {
+          } else {
+            this.api.openSnackBar(response.message, 'X', 'error');
           }
+        } else {
+          this.api.openSnackBar(response.message, 'X', 'error');
+        }
+        console.log(
+          'entregas : ' +
+            this.entregas +
+            ' : ' +
+            'entregasRequest : ' +
+            this.entregasRequest
         );
+        if (this.entregas === this.entregasRequest) {
+          this.getPedidosListBySucursal();
+        }
+        this.SpinnerService.hide();
+      },
+      (error) => {
+        this.SpinnerService.hide();
+        if (error.includes('403')) {
+          this.authService.logout();
+        }
+      }
+    );
   }
 }

@@ -42,6 +42,7 @@ export class AddEditPedidoComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data != null){
+      this.pedido.serie = this.data.serie;
       this.pedido.idpedidoinv = this.data.idpedidoinv;
       this.pedido.idsucursal = this.data.idsucursal;
       this.pedido.idprodinv = this.data.idprodinv;
@@ -155,10 +156,8 @@ export class AddEditPedidoComponent implements OnInit {
         this.SpinnerService.show();
         this.pedido.idprodinv = this.idprodinv;
         this.pedido.existencia = 0;
-        console.log(this.pedido);
         this.api.savePedidoInv(this.pedido).subscribe(
           (response) => {
-            console.log(response);
             if (response != null) {
               if (response.state === 'Success') {
                 this.dialogRef.close();

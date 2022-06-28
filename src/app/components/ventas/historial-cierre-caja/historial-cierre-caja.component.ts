@@ -35,6 +35,7 @@ export class HistorialCierreCajaComponent implements OnInit {
     this.SpinnerService.show();
     this.api.getSucursales().subscribe(
         (response) => {
+          console.log('cierre sucu');
           if (response != null) {
             if (response.state === 'Success') {
               this.sucursalesList = response.data;
@@ -47,10 +48,8 @@ export class HistorialCierreCajaComponent implements OnInit {
           this.SpinnerService.hide();
         },
         (error) => {
+          console.log('error cierre sucu');
           this.SpinnerService.hide();
-          if (error.includes('403')){
-            this.authService.logout();
-          }
         }
       );
   }
@@ -75,9 +74,6 @@ export class HistorialCierreCajaComponent implements OnInit {
         },
         (error) => {
           this.SpinnerService.hide();
-          if (error.includes('403')){
-            this.authService.logout();
-          }
         }
       );
   }
@@ -100,9 +96,6 @@ export class HistorialCierreCajaComponent implements OnInit {
         },
         (error) => {
           this.SpinnerService.hide();
-          if (error.includes('403')){
-            this.authService.logout();
-          }
         }
       );
   }

@@ -173,9 +173,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }
@@ -203,9 +200,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }
@@ -229,9 +223,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }
@@ -321,9 +312,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }
@@ -347,9 +335,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }
@@ -377,9 +362,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }
@@ -479,9 +461,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }
@@ -511,9 +490,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }
@@ -547,9 +523,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }
@@ -571,9 +544,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }
@@ -620,9 +590,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }
@@ -664,9 +631,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }
@@ -708,9 +672,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }
@@ -1000,9 +961,6 @@ export class VentasComponent implements OnInit {
           this.noInProgres = true;
           this.esperando = 'No';
           this.SpinnerService.hide();
-          if (error.includes('403')) {
-            this.authService.logout();
-          }
         }
       );
     } else {
@@ -1040,9 +998,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
     }
@@ -1066,9 +1021,6 @@ export class VentasComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')) {
-          this.authService.logout();
-        }
       }
     );
   }

@@ -116,9 +116,6 @@ export class RealizarCierreCajaComponent implements OnInit {
         },
         (error) => {
           this.SpinnerService.hide();
-          if (error.includes('403')){
-            this.authService.logout();
-          }
         }
       );
   }
@@ -146,9 +143,6 @@ export class RealizarCierreCajaComponent implements OnInit {
         },
         (error) => {
           this.SpinnerService.hide();
-          if (error.includes('403')){
-            this.authService.logout();
-          }
         }
       );
   }
@@ -179,9 +173,6 @@ export class RealizarCierreCajaComponent implements OnInit {
         },
         (error) => {
           this.SpinnerService.hide();
-          if (error.includes('403')){
-            this.authService.logout();
-          }
         }
       );
   }
@@ -268,9 +259,6 @@ export class RealizarCierreCajaComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')){
-          this.authService.logout();
-        }
       }
     );
   }
@@ -293,9 +281,6 @@ export class RealizarCierreCajaComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')){
-          this.authService.logout();
-        }
       }
     );
   }
@@ -322,9 +307,6 @@ export class RealizarCierreCajaComponent implements OnInit {
       },
       (error) => {
         this.SpinnerService.hide();
-        if (error.includes('403')){
-          this.authService.logout();
-        }
       }
     );
   }
