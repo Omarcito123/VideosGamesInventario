@@ -4,66 +4,68 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { sucursales } from '../../models/sucursales';
-import { NgxSpinnerService } from "ngx-spinner"; 
-import { AuthService } from 'src/app/services/auth.service';
-import { ApiService } from 'src/app/services/api.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { AuthService } from '../../services/auth.service';
+import { ApiService } from '../../services/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditSucursalComponent } from './add-edit-sucursal/add-edit-sucursal.component';
 
 @Component({
   selector: 'app-sucursales-inventario',
   templateUrl: './sucursales-inventario.component.html',
-  styleUrls: ['./sucursales-inventario.component.css']
+  styleUrl: './sucursales-inventario.component.css'
 })
+
 export class SucursalesInventarioComponent implements OnInit {
 
   sucursalesList: Array<sucursales> = [];
 
   displayedColumns: string[] = ['idsucursal', 'nombre', 'options'];
-  dataSource = new MatTableDataSource();
+  dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private api: ApiService, private SpinnerService: NgxSpinnerService, public dialog: MatDialog, private authService: AuthService) { }
+  constructor(private api: ApiService, private SpinnerService: NgxSpinnerService,
+              public dialog: MatDialog, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.getSucursalesList();
   }
 
-  applyFilter(event: Event){
+  applyFilter(event: Event): void{
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  getSucursalesList(){
-    this.SpinnerService.show(); 
-      this.api.getSucursales().subscribe(
+  getSucursalesList(): void{
+    this.SpinnerService.show();
+    this.api.getSucursales().subscribe(
         (response) => {
           if (response != null) {
-            if (response.state == "Success") {
-              this.sucursalesList = response.data;   
+            if (response.state === 'Success') {
+              this.sucursalesList = response.data;
               this.dataSource = new MatTableDataSource(this.sucursalesList);
               this.dataSource.paginator = this.paginator;
-              this.dataSource.sort = this.sort;                      
+              this.dataSource.sort = this.sort;
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
           }
-          this.SpinnerService.hide(); 
+          this.SpinnerService.hide();
         },
         (error) => {
-          this.SpinnerService.hide(); 
-          if(error.includes("403")){
+          this.SpinnerService.hide();
+          if (error.includes('403')){
             this.authService.logout();
           }
         }
       );
   }
 
-  addSucursal(): void {   
+  addSucursal(): void {
     const dialogRef = this.dialog.open(AddEditSucursalComponent, {
       data: null
     });
@@ -71,10 +73,10 @@ export class SucursalesInventarioComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       this.getSucursalesList();
-    }); 
+    });
   }
 
-  editSucursal(sucuEdit: any){
+  editSucursal(sucuEdit: any): void{
     const dialogRef = this.dialog.open(AddEditSucursalComponent, {
       data: sucuEdit
     });
@@ -85,7 +87,7 @@ export class SucursalesInventarioComponent implements OnInit {
     });
   }
 
-  deleteSucursal(sucuDelete: any){
+  deleteSucursal(sucuDelete: any): void{
     const dialogRef = this.dialog.open(DialogConfirmacionComponent, {
       width: '350px',
       data: {mensaje: 'Esta seguro que desea eliminar al usuario?'}
@@ -93,11 +95,11 @@ export class SucursalesInventarioComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'aceptar') {
-        this.SpinnerService.show();   
+        this.SpinnerService.show();
         this.api.deleteSucursal(sucuDelete).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == "Success") {
+              if (response.state === 'Success') {
                 this.getSucursalesList();
                 this.api.openSnackBar('La sucursal fue eliminada con exito!', 'X', 'success');
               } else {
@@ -106,10 +108,10 @@ export class SucursalesInventarioComponent implements OnInit {
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
           },
           (error) => {
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
             this.api.openSnackBar(error, 'X', 'error');
           }
         );

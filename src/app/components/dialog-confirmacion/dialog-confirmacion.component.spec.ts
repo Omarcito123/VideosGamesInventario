@@ -8,12 +8,10 @@ describe('DialogConfirmacionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DialogConfirmacionComponent ]
+      declarations: [DialogConfirmacionComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(DialogConfirmacionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

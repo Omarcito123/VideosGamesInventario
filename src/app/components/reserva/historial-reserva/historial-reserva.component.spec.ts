@@ -8,12 +8,10 @@ describe('HistorialReservaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HistorialReservaComponent ]
+      declarations: [HistorialReservaComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(HistorialReservaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

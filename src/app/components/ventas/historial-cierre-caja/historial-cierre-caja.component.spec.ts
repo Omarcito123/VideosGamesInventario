@@ -8,12 +8,10 @@ describe('HistorialCierreCajaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HistorialCierreCajaComponent ]
+      declarations: [HistorialCierreCajaComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(HistorialCierreCajaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -8,12 +8,10 @@ describe('VerPedidoSucursalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ VerPedidoSucursalComponent ]
+      declarations: [VerPedidoSucursalComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(VerPedidoSucursalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

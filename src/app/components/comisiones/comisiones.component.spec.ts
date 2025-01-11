@@ -8,12 +8,10 @@ describe('ComisionesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ComisionesComponent ]
+      declarations: [ComisionesComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(ComisionesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

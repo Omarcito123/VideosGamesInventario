@@ -8,12 +8,10 @@ describe('HistorialControlHorasComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HistorialControlHorasComponent ]
+      declarations: [HistorialControlHorasComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(HistorialControlHorasComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

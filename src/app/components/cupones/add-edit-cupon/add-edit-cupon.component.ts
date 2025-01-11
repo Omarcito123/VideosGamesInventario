@@ -1,19 +1,20 @@
 import { cupones } from './../../../models/cupones';
 import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { sucursales } from 'src/app/models/sucursales'
-import { ApiService } from 'src/app/services/api.service';
-import { NgxSpinnerService } from "ngx-spinner"; 
+import { sucursales } from '../../../models/sucursales';
+import { ApiService } from '../../../services/api.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { categoria } from '../../../models/categoria';
-import { lista } from 'src/app/models/lista';
+import { lista } from '../../../models/lista';
 
 @Component({
   selector: 'app-add-edit-cupon',
   templateUrl: './add-edit-cupon.component.html',
-  styleUrls: ['./add-edit-cupon.component.css']
+  styleUrl: './add-edit-cupon.component.css'
 })
+
 export class AddEditCuponComponent implements OnInit {
 
   addCuponForm: FormGroup;
@@ -26,7 +27,8 @@ export class AddEditCuponComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddEditCuponComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private fb: FormBuilder, private api: ApiService, private SpinnerService: NgxSpinnerService, private authService: AuthService) {
+    @Inject(MAT_DIALOG_DATA) public data: any, private fb: FormBuilder, private api: ApiService,
+    private SpinnerService: NgxSpinnerService, private authService: AuthService) {
       this.addCuponForm = this.fb.group({
         descripcion: ['', [Validators.required, Validators.maxLength(50)]],
         categoria: ['',  [Validators.required, Validators.maxLength(20)]],
@@ -39,7 +41,7 @@ export class AddEditCuponComponent implements OnInit {
   ngOnInit(): void {
     this.getTipoPagoList();
     this.getCategoriasList();
-    if(this.data != null){
+    if (this.data != null){
       this.cupon.idcupon = this.data.idcupon;
       this.cupon.descripcion = this.data.descripcion;
       this.cupon.descuento = this.data.descuento;
@@ -57,43 +59,43 @@ export class AddEditCuponComponent implements OnInit {
     }
   }
 
-  getTipoPagoList() {
+  getTipoPagoList(): void {
     this.tipoCuponList = [
       { value: 1, description: 'Con limite de uso' },
       { value: 2, description: 'Sin limite de uso' },
     ];
   }
 
-  getTipoCupon(event){
+  getTipoCupon(event): void{
     console.log(event);
-    if(event != null){
-      if(event == 'Con limite de uso'){
+    if (event != null){
+      if (event === 'Con limite de uso'){
         this.limitado = false;
       }else{
         this.limitado = true;
         this.cupon.limiteuso = 0;
-      }     
-    }    
+      }
+    }
   }
 
-  getCategoriasList(){
-    this.SpinnerService.show(); 
-      this.api.getCategoriasList().subscribe(
+  getCategoriasList(): void{
+    this.SpinnerService.show();
+    this.api.getCategoriasList().subscribe(
         (response) => {
           if (response != null) {
-            if (response.state == "Success") {
-              this.categoriasList = response.data;                       
+            if (response.state === 'Success') {
+              this.categoriasList = response.data;
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
           }
-          this.SpinnerService.hide(); 
+          this.SpinnerService.hide();
         },
         (error) => {
-          this.SpinnerService.hide(); 
-          if(error.includes("403")){
+          this.SpinnerService.hide();
+          if (error.includes('403')){
             this.authService.logout();
           }
         }
@@ -104,18 +106,18 @@ export class AddEditCuponComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  saveCupon(){
-    if(this.addCuponForm.valid){   
-      if(this.cupon.tipocupon == null || this.cupon.tipocupon == undefined || this.cupon.tipocupon == ''){
-        this.api.openSnackBar("Selecciona un tipo de cupon", 'X', 'error');
+  saveCupon(): void{
+    if (this.addCuponForm.valid){
+      if (this.cupon.tipocupon == null || this.cupon.tipocupon == undefined || this.cupon.tipocupon == ''){
+        this.api.openSnackBar('Selecciona un tipo de cupon', 'X', 'error');
         return;
-      }  
-      if(this.isNewUser){
+      }
+      if (this.isNewUser){
         this.SpinnerService.show();
         this.api.saveCuponInv(this.cupon).subscribe(
           (response) => {
-            if (response != null) {            
-              if (response.state == "Success") {
+            if (response != null) {
+              if (response.state === 'Success') {
                 this.dialogRef.close();
                 this.api.openSnackBar(response.message, 'X', 'success');
               } else {
@@ -124,11 +126,11 @@ export class AddEditCuponComponent implements OnInit {
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
           },
           (error) => {
-            this.SpinnerService.hide(); 
-            if(error.includes("403")){
+            this.SpinnerService.hide();
+            if (error.includes('403')){
               this.authService.logout();
             }
           }
@@ -137,28 +139,28 @@ export class AddEditCuponComponent implements OnInit {
         this.SpinnerService.show();
         this.api.updateCuponInv(this.cupon).subscribe(
           (response) => {
-            if (response != null) {            
-              if (response.state == "Success") {
+            if (response != null) {
+              if (response.state === 'Success') {
                 this.dialogRef.close();
-                this.api.openSnackBar("Cupon modificado exitosamente", 'X', 'success');
+                this.api.openSnackBar('Cupon modificado exitosamente', 'X', 'success');
               } else {
                 this.api.openSnackBar(response.message, 'X', 'error');
               }
             } else {
               this.api.openSnackBar(response.message, 'X', 'error');
             }
-            this.SpinnerService.hide(); 
+            this.SpinnerService.hide();
           },
           (error) => {
-            this.SpinnerService.hide(); 
-            if(error.includes("403")){
+            this.SpinnerService.hide();
+            if (error.includes('403')){
               this.authService.logout();
             }
           }
         );
       }
     }else{
-      this.api.openSnackBar("Ingresa los campos requeridos", 'X', 'error');
+      this.api.openSnackBar('Ingresa los campos requeridos', 'X', 'error');
     }
   }
 }

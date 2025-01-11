@@ -3,7 +3,7 @@ import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core';
 import {Keepalive} from '@ng-idle/keepalive';
 import { Router } from "@angular/router";
 import { Location } from '@angular/common';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',

@@ -1,14 +1,24 @@
 <div class="container textCon">
     <div class="row" style="margin-top: 15px;">
-        <div class="col-lg-4">
+        <div class="col-lg-2">
             <mat-form-field appearance="fill" style="width: 100%;">
-                <mat-label>Mes</mat-label>
-                <mat-select [(ngModel)]="selectedMonth" (ngModelChange)="getControlHorasByUser()" name="monthS">
-                    <mat-option *ngFor="let mes of monthsList" [value]="mes.value">
-                        {{ mes.description }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+                <mat-label>Fecha inicio</mat-label>
+                <input matInput [matDatepicker]="expiration1" readonly placeholder="Fecha inicio" required [(ngModel)]="dateStart">
+                <mat-datepicker-toggle matSuffix [for]="expiration1"></mat-datepicker-toggle>
+                <mat-datepicker #expiration1></mat-datepicker>
+                <!--<mat-label>Ingresa una fecha</mat-label>
+                <input matInput placeholder="Ingresa una fecha" (change)="getVentasBySucursal()" type="date" [(ngModel)]="dateVenta">
+                --></mat-form-field>
+        </div>
+        <div class="col-lg-2">
+            <mat-form-field appearance="fill" style="width: 100%;">
+                <mat-label>Fecha fin</mat-label>
+                <input matInput [matDatepicker]="expiration2" readonly placeholder="Fecha fin" required [(ngModel)]="dateEnd">
+                <mat-datepicker-toggle matSuffix [for]="expiration2"></mat-datepicker-toggle>
+                <mat-datepicker #expiration2></mat-datepicker>
+                <!--<mat-label>Ingresa una fecha</mat-label>
+                <input matInput placeholder="Ingresa una fecha" (change)="getVentasBySucursal()" type="date" [(ngModel)]="dateVenta">
+                --></mat-form-field>
         </div>
         <div class="col-lg-4">
             <mat-form-field appearance="fill" style="width: 100%;">

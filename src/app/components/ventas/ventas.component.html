@@ -336,33 +336,45 @@
         </div>
     </mat-tab>
     <mat-tab label="Ventas del dia">
-        <div class="container">
-            <app-list-ventas></app-list-ventas>
-        </div>
+        <ng-template matTabContent>
+            <div class="container">
+                <app-list-ventas></app-list-ventas>
+            </div>
+        </ng-template>
     </mat-tab>
     <mat-tab label="Ventas diarias" *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'">
-        <div class="container">
-            <app-ventas-diarias></app-ventas-diarias>
-        </div>
+        <ng-template matTabContent>
+            <div class="container">
+                <app-ventas-diarias></app-ventas-diarias>
+            </div>
+        </ng-template>
     </mat-tab>
     <mat-tab label="Ventas mensuales" *ngIf="rol == 'SuperAdmin'">
-        <div class="container">
-            <app-ventas-mensuales></app-ventas-mensuales>
-        </div>
+        <ng-template matTabContent>
+            <div class="container">
+                <app-ventas-mensuales></app-ventas-mensuales>
+            </div>
+        </ng-template>
     </mat-tab>
     <mat-tab label="Reservas" *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'">
-        <div class="container">
-            <app-reservas-por-sucursal></app-reservas-por-sucursal>
-        </div>
+        <ng-template matTabContent>
+            <div class="container">
+                <app-reservas-por-sucursal></app-reservas-por-sucursal>
+            </div>
+        </ng-template>
     </mat-tab>
     <mat-tab label="Realizar cierre caja">
-        <div class="container">
-            <app-realizar-cierre-caja></app-realizar-cierre-caja>
-        </div>
+        <ng-template matTabContent>
+            <div class="container">
+                <app-realizar-cierre-caja></app-realizar-cierre-caja>
+            </div>
+        </ng-template>
     </mat-tab>
     <mat-tab label="Historial cierre caja" *ngIf="rol == 'SuperAdmin'">
-        <div class="container">
-            <app-historial-cierre-caja></app-historial-cierre-caja>
-        </div>
+        <ng-template matTabContent>
+            <div class="container">
+                <app-historial-cierre-caja></app-historial-cierre-caja>
+            </div>
+        </ng-template>
     </mat-tab>
 </mat-tab-group>

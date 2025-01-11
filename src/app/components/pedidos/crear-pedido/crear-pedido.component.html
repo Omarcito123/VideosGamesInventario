@@ -58,6 +58,9 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
+        <div style="text-align: left; margin-right: 25px;">
+            <h3 style="font-weight: bold;">Pedido total: {{ sumTotal }}</h3>
+        </div>
         <mat-paginator [pageSizeOptions]="[50, 100, 150]" showFirstLastButtons></mat-paginator>
     </div>
 </div>

@@ -8,12 +8,10 @@ describe('AddEditComisionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddEditComisionComponent ]
+      declarations: [AddEditComisionComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(AddEditComisionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

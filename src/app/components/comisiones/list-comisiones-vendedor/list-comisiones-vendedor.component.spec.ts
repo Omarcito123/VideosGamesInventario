@@ -8,12 +8,10 @@ describe('ListComisionesVendedorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ListComisionesVendedorComponent ]
+      declarations: [ListComisionesVendedorComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(ListComisionesVendedorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

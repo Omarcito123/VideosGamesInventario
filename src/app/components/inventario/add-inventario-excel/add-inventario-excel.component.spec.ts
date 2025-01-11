@@ -8,12 +8,10 @@ describe('AddInventarioExcelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddInventarioExcelComponent ]
+      declarations: [AddInventarioExcelComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(AddInventarioExcelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

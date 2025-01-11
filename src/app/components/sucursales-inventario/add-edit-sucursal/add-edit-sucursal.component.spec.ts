@@ -8,12 +8,10 @@ describe('AddEditSucursalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddEditSucursalComponent ]
+      declarations: [AddEditSucursalComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(AddEditSucursalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

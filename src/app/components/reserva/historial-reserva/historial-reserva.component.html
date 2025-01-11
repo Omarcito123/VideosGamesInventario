@@ -89,6 +89,12 @@
         </ng-container>
 
         <!-- Symbol Column -->
+        <ng-container matColumnDef="dateadd">
+            <th mat-header-cell *matHeaderCellDef> Fecha </th>
+            <td mat-cell *matCellDef="let element"> {{element.dateadd | date:'dd/MM/yyyy'}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
         <ng-container matColumnDef="options">
             <th mat-header-cell *matHeaderCellDef style="text-align: center; font-weight: bold;"> Opciones </th>
             <td mat-cell *matCellDef="let element" style="text-align: center;">

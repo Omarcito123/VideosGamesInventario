@@ -8,12 +8,10 @@ describe('EliminarInventatioComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EliminarInventatioComponent ]
+      declarations: [EliminarInventatioComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(EliminarInventatioComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

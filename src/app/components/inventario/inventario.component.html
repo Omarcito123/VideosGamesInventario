@@ -39,16 +39,16 @@
                 </mat-select>
             </mat-form-field>
         </div>
-        <div *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'" class="col-lg-2">
+        <div *ngIf="rol == 'SuperAdmin'" class="col-lg-2">
             <button mat-raised-button color="primary" (click)="addInventarioExcel()">Cargar Inventario</button>
         </div>
         <div *ngIf="rol == 'SuperAdmin'" class="col-lg-2">
             <button mat-raised-button color="primary" (click)="eliminarInventario()">Eliminar Inventario</button>
         </div>
-        <div *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'" class="col-lg-2">
+        <div *ngIf="rol == 'SuperAdmin'" class="col-lg-2">
             <button mat-raised-button color="primary" (click)="addProduct()">Agregar Producto</button>
         </div>
-        <div *ngIf="rol == 'SuperAdmin' || rol == 'Administrador'" class="col-lg-2">
+        <div *ngIf="rol == 'SuperAdmin'" class="col-lg-2">
             <button mat-raised-button color="primary" (click)="descargarExcel()">Descargar Inventario</button>
         </div>
         <div *ngIf="rol == 'SuperAdmin'" class="col-lg-3" style="text-align: right;">

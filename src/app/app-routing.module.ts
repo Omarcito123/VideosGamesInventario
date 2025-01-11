@@ -8,7 +8,7 @@ import { ComprasUsadoComponent } from './components/compras-usado/compras-usado.
 import { ControlHorasComponent } from './components/control-horas/control-horas.component';
 import { ComisionesComponent } from './components/comisiones/comisiones.component';
 import { MiPerfilComponent } from './components/mi-perfil/mi-perfil.component';
-import { ActiveUrlService } from './utils/auth/active-url.service';
+import { ActiveUrlService } from './utils/active-url.service';
 import { InventarioComponent } from './components/inventario/inventario.component';
 import { CuponesComponent } from './components/cupones/cupones.component';
 import { ReparacionesComponent } from './components/reparaciones/reparaciones.component';

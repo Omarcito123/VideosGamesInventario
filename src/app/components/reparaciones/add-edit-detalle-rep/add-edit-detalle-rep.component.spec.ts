@@ -8,12 +8,10 @@ describe('AddEditDetalleRepComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddEditDetalleRepComponent ]
+      declarations: [AddEditDetalleRepComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(AddEditDetalleRepComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

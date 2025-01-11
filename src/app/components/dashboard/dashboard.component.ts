@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { DialogConfirmacionComponent } from './../dialog-confirmacion/dialog-confirmacion.component';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrl: './dashboard.component.css'
 })
+
 export class DashboardComponent implements OnInit {
 
   userSesion: any;
@@ -22,7 +23,7 @@ export class DashboardComponent implements OnInit {
 
   openDialogLogout(): void {
     const dialogRef = this.dialog.open(DialogConfirmacionComponent, {
-      width: '350px',
+      width: '400px',
       data: {mensaje: '¿Estas seguro que quieres cerrar la sesion?'}
     });
 

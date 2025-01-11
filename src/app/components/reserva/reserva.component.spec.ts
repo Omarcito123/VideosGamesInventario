@@ -8,12 +8,10 @@ describe('ReservaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ReservaComponent ]
+      declarations: [ReservaComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(ReservaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

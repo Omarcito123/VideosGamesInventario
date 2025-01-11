@@ -8,12 +8,10 @@ describe('ControlHorasComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ControlHorasComponent ]
+      declarations: [ControlHorasComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(ControlHorasComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

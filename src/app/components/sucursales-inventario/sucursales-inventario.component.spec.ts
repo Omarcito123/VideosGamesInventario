@@ -8,12 +8,10 @@ describe('SucursalesInventarioComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SucursalesInventarioComponent ]
+      declarations: [SucursalesInventarioComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(SucursalesInventarioComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

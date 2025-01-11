@@ -8,12 +8,10 @@ describe('CrearPedidoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CrearPedidoComponent ]
+      declarations: [CrearPedidoComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(CrearPedidoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

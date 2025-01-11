@@ -8,12 +8,10 @@ describe('ChangePassComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChangePassComponent ]
+      declarations: [ChangePassComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(ChangePassComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,12 +1,12 @@
-import { producto } from 'src/app/models/producto';
+import { producto } from '../../../models/producto';
 import { DialogConfirmacionComponent } from '../../dialog-confirmacion/dialog-confirmacion.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { AuthService } from 'src/app/services/auth.service';
-import { ApiService } from 'src/app/services/api.service';
+import { AuthService } from '../../../services/auth.service';
+import { ApiService } from '../../../services/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { pedidoInv } from '../../../models/pedido';
 import { sucursales } from '../../../models/sucursales';
@@ -15,8 +15,9 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-ver-pedido-sucursal',
   templateUrl: './ver-pedido-sucursal.component.html',
-  styleUrls: ['./ver-pedido-sucursal.component.css'],
+  styleUrl: './ver-pedido-sucursal.component.css'
 })
+
 export class VerPedidoSucursalComponent implements OnInit {
   pedidosList: Array<pedidoInv> = [];
   pedidosTrasladarList: Array<pedidoInv> = [];
@@ -25,6 +26,8 @@ export class VerPedidoSucursalComponent implements OnInit {
   selectedSucursal: number;
   sucursalesList: sucursales[];
   productTras = new producto();
+  entregas: number;
+  entregasRequest = 0;
 
   displayedColumns: string[] = [
     'seleccionar',
@@ -34,7 +37,7 @@ export class VerPedidoSucursalComponent implements OnInit {
     'nombreproducto',
     'dateadd',
   ];
-  dataSource = new MatTableDataSource();
+  dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -52,17 +55,17 @@ export class VerPedidoSucursalComponent implements OnInit {
     this.getSucursales();
   }
 
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  getSucursales() {
+  getSucursales(): void {
     this.SpinnerService.show();
     this.api.getSucursales().subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.sucursalesList = response.data;
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
@@ -81,13 +84,14 @@ export class VerPedidoSucursalComponent implements OnInit {
     );
   }
 
-  getPedidosListBySucursal() {
+  getPedidosListBySucursal(): void {
+    this.pedidosTrasladarList = [];
     this.SpinnerService.show();
     this.pedido.idsucursal = this.selectedSucursal;
     this.api.getPedidosListBySucursal(this.pedido).subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.pedidosList = response.data;
             this.dataSource = new MatTableDataSource(this.pedidosList);
             this.dataSource.paginator = this.paginator;
@@ -109,48 +113,68 @@ export class VerPedidoSucursalComponent implements OnInit {
     );
   }
 
-  setEntregar(event, element) {
+  setEntregar(event, element): void {
     if (event) {
       this.pedidosTrasladarList.push(element);
     } else {
       this.pedidosTrasladarList.forEach((value, index) => {
-        if (value.idpedidoinv == element.idpedidoinv) {
+        if (value.idpedidoinv === element.idpedidoinv) {
           this.pedidosTrasladarList.splice(index, 1);
         }
       });
     }
   }
 
-  entregarProductos(){
+  entregarProductos(): void {
+    this.entregasRequest = 0;
+    this.entregas = this.pedidosTrasladarList.length;
     this.pedidosTrasladarList.forEach((value, index) => {
-      if(value.cantidad > value.existenciabodega){
-        this.api.openSnackBar('La cantidad ingresa es mayor a la existencia del producto: ' + value.nombreproducto, 'X', 'error');
-      }else{
+      if (value.cantidad > value.existenciabodega) {
+        this.api.openSnackBar(
+          'La cantidad ingresa es mayor a la existencia del producto: ' +
+            value.nombreproducto,
+          'X',
+          'error'
+        );
+      } else {
         this.trasladarProducto(value);
       }
-    });    
+    });
+    this.pedidosTrasladarList = [];
   }
 
-  trasladarProducto(pedido: pedidoInv) {
+  async trasladarProducto(pedido: pedidoInv): Promise<void> {
+    this.productTras = new producto();
     this.SpinnerService.show();
     this.productTras.idsucursal = this.selectedSucursal;
     this.productTras.existencia = pedido.cantidad;
     this.productTras.nombre = pedido.nombreproducto;
+    this.productTras.serie = pedido.serie;
     this.productTras.idprodinv = pedido.idprodinv;
     this.productTras.iduseradd = this.userSesion.iduser;
+
     this.api.trasladarProducto(this.productTras).subscribe(
       (response) => {
-        if (response != null) {
-          if (response.state == 'Success') {
-            this.api.openSnackBar("Producto " + pedido.nombreproducto + " entregado exitosamente", 'X', 'success');
-            this.updatePedidoInv(pedido);
+        this.entregasRequest = this.entregasRequest + 1;
+        if (response) {
+          if (response != null) {
+            if (response.state === 'Success') {
+              this.api.openSnackBar(
+                'Producto ' + pedido.nombreproducto + ' entregado exitosamente',
+                'X',
+                'success'
+              );
+              this.updatePedidoInv(pedido);
+            } else {
+              this.api.openSnackBar(response.message, 'X', 'error');
+            }
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
           }
+          this.SpinnerService.hide();
         } else {
-          this.api.openSnackBar(response.message, 'X', 'error');
+          this.SpinnerService.hide();
         }
-        this.SpinnerService.hide();
       },
       (error) => {
         this.SpinnerService.hide();
@@ -161,31 +185,39 @@ export class VerPedidoSucursalComponent implements OnInit {
     );
   }
 
-  updatePedidoInv(pedido: pedidoInv){
-    var myDate = new Date();
+  updatePedidoInv(pedido: pedidoInv): void {
+    const myDate = new Date();
     pedido.fechaentrega = this.datePipe.transform(myDate, 'yyyy/MM/dd');
     pedido.estado = 'entregado';
     this.SpinnerService.show();
-        this.api.updatePedidoInv(pedido).subscribe(
-          (response) => {
-            if (response != null) {            
-              if (response.state == "Success") {
-                this.getPedidosListBySucursal();
-                //this.api.openSnackBar("Producto modificado exitosamente", 'X', 'success');
-              } else {
-                this.api.openSnackBar(response.message, 'X', 'error');
-              }
-            } else {
-              this.api.openSnackBar(response.message, 'X', 'error');
-            }
-            this.SpinnerService.hide(); 
-          },
-          (error) => {
-            this.SpinnerService.hide(); 
-            if(error.includes("403")){
-              this.authService.logout();
-            }
+    this.api.updatePedidoInv(pedido).subscribe(
+      (response) => {
+        if (response != null) {
+          if (response.state === 'Success') {
+          } else {
+            this.api.openSnackBar(response.message, 'X', 'error');
           }
+        } else {
+          this.api.openSnackBar(response.message, 'X', 'error');
+        }
+        console.log(
+          'entregas : ' +
+            this.entregas +
+            ' : ' +
+            'entregasRequest : ' +
+            this.entregasRequest
         );
+        if (this.entregas === this.entregasRequest) {
+          this.getPedidosListBySucursal();
+        }
+        this.SpinnerService.hide();
+      },
+      (error) => {
+        this.SpinnerService.hide();
+        if (error.includes('403')) {
+          this.authService.logout();
+        }
+      }
+    );
   }
 }

@@ -8,12 +8,10 @@ describe('TrasladarProductoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TrasladarProductoComponent ]
+      declarations: [TrasladarProductoComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(TrasladarProductoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

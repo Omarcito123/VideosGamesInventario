@@ -2,17 +2,18 @@ import { userInv } from './../../../models/userInv';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { lista } from '../../../models/lista';
-import { sucursales } from 'src/app/models/sucursales';
-import { ApiService } from 'src/app/services/api.service';
+import { sucursales } from '../../../models/sucursales';
+import { ApiService } from '../../../services/api.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-add-edit-user',
   templateUrl: './add-edit-user.component.html',
-  styleUrls: ['./add-edit-user.component.css'],
+  styleUrl: './add-edit-user.component.css'
 })
+
 export class AddEditUserComponent implements OnInit {
   hide = true;
   addUserForm: FormGroup;
@@ -76,18 +77,18 @@ export class AddEditUserComponent implements OnInit {
     }
   }
 
-  showHidenPass() {
+  showHidenPass(): void {
     this.hide = !this.hide;
   }
 
-  getEstadosList() {
+  getEstadosList(): void {
     this.listaEstados = [
       { value: 1, description: 'Habilitar' },
       { value: 0, description: 'Deshabilitar' },
     ];
   }
 
-  getRolesList() {
+  getRolesList(): void {
     this.listaRoles = [
       { value: 1, description: 'Administrador' },
       { value: 2, description: 'Vendedor' },
@@ -96,12 +97,12 @@ export class AddEditUserComponent implements OnInit {
     ];
   }
 
-  getSucursalesList() {
+  getSucursalesList(): void {
     this.SpinnerService.show();
     this.api.getSucursales().subscribe(
       (response) => {
         if (response != null) {
-          if (response.state == 'Success') {
+          if (response.state === 'Success') {
             this.sucursalesList = response.data;
           } else {
             this.api.openSnackBar(response.message, 'X', 'error');
@@ -124,7 +125,7 @@ export class AddEditUserComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  saveUser() {
+  saveUser(): void {
     if (this.addUserForm.valid) {
       this.usuario.active = this.selectedEstado;
       this.usuario.idrol = this.selectedRol;
@@ -134,7 +135,7 @@ export class AddEditUserComponent implements OnInit {
         this.api.saveUserInv(this.usuario).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == 'Success') {
+              if (response.state === 'Success') {
                 this.dialogRef.close();
                 this.api.openSnackBar(response.message, 'X', 'success');
               } else {
@@ -160,7 +161,7 @@ export class AddEditUserComponent implements OnInit {
         this.api.updateUserInv(this.usuario).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == 'Success') {
+              if (response.state === 'Success') {
                 this.dialogRef.close();
                 this.api.openSnackBar(
                   'Usuario modificado exitosamente',

@@ -8,12 +8,10 @@ describe('AddEditCategoriaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddEditCategoriaComponent ]
+      declarations: [AddEditCategoriaComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(AddEditCategoriaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

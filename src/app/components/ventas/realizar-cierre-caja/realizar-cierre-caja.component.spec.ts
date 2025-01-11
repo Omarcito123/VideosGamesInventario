@@ -8,12 +8,10 @@ describe('RealizarCierreCajaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RealizarCierreCajaComponent ]
+      declarations: [RealizarCierreCajaComponent]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(RealizarCierreCajaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

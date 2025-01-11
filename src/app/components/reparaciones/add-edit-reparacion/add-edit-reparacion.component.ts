@@ -1,16 +1,17 @@
 import { reparacionEnc } from './../../../models/reparacionEnc';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ApiService } from 'src/app/services/api.service';
+import { ApiService } from '../../../services/api.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-add-edit-reparacion',
   templateUrl: './add-edit-reparacion.component.html',
-  styleUrls: ['./add-edit-reparacion.component.css'],
+  styleUrl: './add-edit-reparacion.component.css'
 })
+
 export class AddEditReparacionComponent implements OnInit {
   hide = true;
   addReparacionForm: FormGroup;
@@ -53,14 +54,14 @@ export class AddEditReparacionComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  saveRep() {
+  saveRep(): void {
     if (this.addReparacionForm.valid) {
       if (this.isNew) {
         this.SpinnerService.show();
         this.api.saveReparacionInv(this.reparacion).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == 'Success') {
+              if (response.state === 'Success') {
                 this.dialogRef.close();
                 this.api.openSnackBar(response.message, 'X', 'success');
               } else {
@@ -84,7 +85,7 @@ export class AddEditReparacionComponent implements OnInit {
         this.api.updateReparaionInv(this.reparacion).subscribe(
           (response) => {
             if (response != null) {
-              if (response.state == 'Success') {
+              if (response.state === 'Success') {
                 this.dialogRef.close();
                 this.api.openSnackBar(
                   'Reparacion modificada exitosamente',
